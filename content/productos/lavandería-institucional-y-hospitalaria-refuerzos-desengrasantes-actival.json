@@ -1,0 +1,15 @@
+{
+  "published": true,
+  "title": "ACTIVAL",
+  "linea": "Lavandería institucional y hospitalaria",
+  "categoria": "Refuerzos desengrasantes",
+  "excerpt": "🧴 Actival – Desmanchador Textil de Alta Eficacia\nACTIVAL PS MAX es un desmanchador textil industrial formulado para remover manchas difíciles en prendas de uso institucional, hotelero, hospitalario y doméstico. Su poderosa acción penetra las fibras y elimina suciedad acumulada, grasas, aceites, maquillaje, tinta, alimentos y otros tipos de manchas resistentes.\nEs ideal para procesos de lavandería industrial y hospitalaria, donde se requiere un resultado uniforme y de alto nivel. Su presentación de 20 litros garantiza excelente rendimiento y eficiencia en operaciones de gran volumen.",
+  "image": "/assets/uploads/actival.png",
+  "presentaciones": [
+    {
+      "empaque": "Galón",
+      "volumen": 20,
+      "unidad": "L"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "published": true,
+  "title": "Lavaloza",
+  "linea": "Aseo de cocinas",
+  "categoria": "Vajilla y superficies",
+  "image": "/assets/uploads/lavaloza.png",
+  "excerpt": "El Lavaloza PS MAX es un detergente líquido formulado para la limpieza profunda de vajilla, utensilios y superficies de cocina. Su poderosa acción desengrasante elimina residuos de comida, aceites y suciedad adherida, dejando las superficies brillantes y libres de residuos.\nEs ideal para uso en cocinas industriales, restaurantes, hoteles e instituciones, gracias a su alta eficiencia y rendimiento. Disponible en presentación de 20 litros, garantiza economía y continuidad en operaciones de alto consumo.",
+  "presentaciones": [
+    {
+      "empaque": "Galón",
+      "volumen": 20,
+      "unidad": "L"
+    }
+  ]
+}

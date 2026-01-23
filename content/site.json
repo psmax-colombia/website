@@ -1,0 +1,97 @@
+{
+  "heroImage": "",
+  "products": [
+    {
+      "id": "lavanderia-detergente-industrial-x",
+      "title": "Detergente Industrial X",
+      "linea": "Lavandería institucional y hospitalaria",
+      "categoria": "Detergentes",
+      "excerpt": "Detergente líquido concentrado para lavanderías industriales.",
+      "image": "/assets/uploads/detergente-x.png",
+      "ficha": "/assets/uploads/ficha-detergente-x.pdf",
+      "published": true
+    },
+    {
+      "id": "cuidado-personal-alcohol-glicerinado",
+      "title": "Alcohol Glicerinado 70%",
+      "linea": "Cuidado personal",
+      "categoria": "Alcohol",
+      "excerpt": "Gel antibacterial con glicerina para cuidado de manos.",
+      "image": "/assets/uploads/alcohol-glicerinado.png",
+      "ficha": "/assets/uploads/ficha-alcohol.pdf",
+      "published": true
+    }
+  ],
+  "ctaLabel": "Ver portafolio",
+  "socialInstagram": "https://instagram.com/psmaxmultisoluciones",
+  "imgExperienciaGap": 2,
+  "logo": "/assets/uploads/logopsmax.png",
+  "socialLinkedin": "https://www.linkedin.com/company/psmaxmultisoluciones",
+  "phone": "573000000000",
+  "imgExperiencia": "/assets/uploads/imgexp.png",
+  "productLines": [
+    {
+      "link": "productos.html",
+      "title": "Lavandería Institucional y Hospitalaria",
+      "description": "Detergentes, suavizantes, blanqueadores y más",
+      "image": "/assets/uploads/lavanderiainstitucional.png",
+      "anchor": "lavanderia-institucional-y-hospitalaria"
+    },
+    {
+      "link": "productos.html",
+      "title": "Aseo y Superficies",
+      "description": "Pisos y superficies",
+      "image": "/assets/uploads/aseodesuperficies.png",
+      "anchor": "aseo-de-superficies"
+    },
+    {
+      "link": "productos.html",
+      "title": "Aseo de Cocinas",
+      "description": "Vajilla y superficies",
+      "image": "/assets/uploads/aseoconinas.png",
+      "anchor": "aseo-de-cocinas"
+    },
+    {
+      "link": "productos.html",
+      "title": "Cuidado Personal",
+      "description": "Jabón de manos, alcohol y alcohol glicerinado",
+      "image": "/assets/uploads/aseopersonalmain.png",
+      "anchor": "cuidado-personal"
+    }
+  ],
+  "whatsapp": "+57 313 4028929",
+  "heroSubtitle": "Productos diseñados para optimizar procesos, garantizar limpieza profunda y prolongar la vida útil de los textiles.",
+  "logoHeight": 80,
+  "socialFacebook": "https://facebook.com/psmaxmultisoluciones",
+  "address": "Bogotá, Colombia",
+  "whatsappMessage": "Hola PS Max, estoy interesado en sus productos. ¿Me puedes ayudar con una cotización?",
+  "imgExperienciaAlign": "center",
+  "experienceText": "Contamos con más de 10 años de experiencia ofreciendo los mejores productos para el aseo y la desinfección.",
+  "imgExperienciaHeight": 110,
+  "ctaHref": "#linea-lavanderia",
+  "heroSlides": [
+    {
+      "image": "/assets/uploads/lavanderiainstuticional.png",
+      "title": "Soluciones para Lavandería Institucional y Hospitalaria",
+      "subtitle": "Procesos optimizados para reducir consumo y cuidar textiles.",
+      "ctaLabel": "Ver portafolio",
+      "ctaHref": "#linea-lavanderia"
+    },
+    {
+      "image": "/assets/uploads/lavanderia.png",
+      "title": "Blanqueo eficiente",
+      "subtitle": "Mayor blancura con menor daño a fibras y otra cosa.",
+      "ctaLabel": "Contactanos",
+      "ctaHref": "#linea-lavanderia"
+    },
+    {
+      "image": "/assets/uploads/aseopersonal.png",
+      "title": "Aseo Personal",
+      "subtitle": "Productos para la limpieza y aseo personal",
+      "ctaLabel": "Solicitar demo",
+      "ctaHref": "#demo"
+    }
+  ],
+  "email": "contacto@psmaxmultisoluciones.com",
+  "heroTitle": "Soluciones para Lavandería Institucional y Hospitalaria"
+}

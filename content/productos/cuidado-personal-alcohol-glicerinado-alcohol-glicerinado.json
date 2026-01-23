@@ -1,0 +1,20 @@
+{
+  "published": true,
+  "title": "ALCOHOL GLICERINADO",
+  "linea": "Cuidado personal",
+  "categoria": "Alcohol glicerinado",
+  "excerpt": "🧴 Alcohol Glicerinado – Desinfectante Instantáneo de Alto Espectro\nEl Alcohol Glicerinado PS MAX es un desinfectante de acción inmediata formulado para eliminar microorganismos de manera eficaz en piel y superficies. Su contenido de glicerina ayuda a proteger y humectar las manos, evitando la resequedad incluso con usos frecuentes.\nIdeal para entornos institucionales, hospitalarios, industriales y comerciales, donde se requiere higiene constante y efectiva. Su presentación de 20 litros garantiza excelente rendimiento y economía para operaciones de alto consumo.",
+  "image": "/assets/uploads/alcohol-glicerinado.png",
+  "presentaciones": [
+    {
+      "empaque": "Galón",
+      "volumen": 20,
+      "unidad": "L"
+    },
+    {
+      "empaque": "Garrafa",
+      "volumen": 1,
+      "unidad": "L"
+    }
+  ]
+}

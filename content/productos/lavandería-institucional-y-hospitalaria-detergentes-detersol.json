@@ -1,0 +1,15 @@
+{
+  "published": true,
+  "title": "DETERSOL",
+  "linea": "Lavandería institucional y hospitalaria",
+  "categoria": "Detergentes",
+  "excerpt": "🧴 Detersol – Detergente Industrial Alcalino para Lavandería\nDETERSOL PS MAX es un detergente industrial con pH alcalino diseñado para el lavado de textiles de alta suciedad, especialmente en entornos hospitalarios, hoteleros, institucionales e industriales. Su fórmula potente remueve residuos difíciles, grasas, aceites y suciedad incrustada, dejando las prendas más limpias, frescas y con colores más vivos.\nSu presentación de 20 litros garantiza excelente rendimiento y eficiencia en ciclos de lavado de alto volumen",
+  "image": "/assets/uploads/detersol.png",
+  "presentaciones": [
+    {
+      "empaque": "Galón",
+      "volumen": 20,
+      "unidad": "L"
+    }
+  ]
+}

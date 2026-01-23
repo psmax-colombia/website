@@ -1,0 +1,247 @@
+/* =========================
+   ESTILOS PERSONALIZADOS PS MAX
+   ========================= */
+
+/* Aumentar tamaño base de toda la página (equivale a 110%) */
+html {
+  font-size: 17.6px !important; /* 10% más grande que 16px */
+}
+
+/* --- Slider (dots) --- */
+#hero {
+  position: relative;
+}
+
+#hero .tns-nav {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+#hero .tns-nav button {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#hero .tns-nav button:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+#hero .tns-nav .tns-nav-active {
+  background: #16b96b; /* Verde corporativo */
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+/* --- Paleta de colores auxiliares --- */
+.bg-primary {
+  background-color: #16b96b;
+}
+
+.text-primary {
+  color: #16b96b;
+}
+
+.bg-accent {
+  background-color: #1f6fff;
+}
+
+.text-accent {
+  color: #1f6fff;
+}
+
+/* --- Ajustes generales --- */
+section {
+  scroll-margin-top: 80px; /* evita que el header tape las secciones al hacer click */
+}
+
+/* ===== Header / menú principal más verde ===== */
+header.sticky {
+  /* De un verde más intenso (#b5e2c5) a un verde clarito (#eef8f2) */
+  background: linear-gradient(to bottom, #b5e2c5 0%, #eef8f2 100%) !important;
+}
+/* Recuadro del formulario de demostración */
+.demo-form-card {
+  background-color: #f3faf5;      /* Verde pastel MUY suave */
+  border: 1px solid #cfe8d7;      /* Borde en verde claro */
+  border-radius: 16px;
+}
+
+/* Botón coherente con la paleta primaria */
+.demo-form-card button {
+  background-color: #166c31;
+  border-color: #166c31;
+}
+
+/* ===== Footer PS MAX - Verde corporativo ===== */
+footer {
+    background: linear-gradient(to bottom, #124d2f 0%, #0f3f26 100%) !important;
+    color: white !important;
+}
+
+/* Texto del footer un poquito más claro para mejor lectura */
+footer p,
+footer a,
+footer span {
+    color: #e8f8ee !important;
+}
+
+/* Fondo general de la página */
+body {
+  background: #ffff 100%;
+}
+/* Ajuste del color del Header */
+header.sticky {
+  background: linear-gradient(to bottom, #b5e2c5 0%, #eef8f2 100%) !important;
+}
+
+/* Region Sectores que atendemos  INICIO */
+/* Tarjetas de sectores */
+.porque-card,
+.sector-card {
+  background-color: #ffffff;
+  border: 1px solid #d8f3e0;
+  border-radius: 16px;
+  padding: 22px;
+  text-align: left;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.porque-card:hover,
+.sector-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+/* Fondo blanco por defecto */
+.porque-card,
+.sector-card {
+  background-color: #ffffff;
+  border: 1px solid #d8f3e0;
+  border-radius: 16px;
+  padding: 22px;
+  text-align: left;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color .25s ease;
+}
+
+/* Hover con fondo verde pastel suave */
+.porque-card:hover,
+.sector-card:hover {
+  background-color: #F3FAF5; /* verde pastel */
+  transform: translateY(-4px);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+/* Iconos de los sectores */
+.sector-icon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+/* Títulos dentro de las tarjetas */
+.porque-card h3,
+.sector-card h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #166c31;
+  margin-bottom: 4px;
+}
+
+/* Párrafos dentro de las tarjetas */
+.porque-card p,
+.sector-card p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #506a5f;
+}
+
+/* Texto introductorio de sección (debajo de los títulos) */
+.section-lead {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #506a5f;
+}
+/* Region Sectores que atendemos  FIN */
+
+/* --- Iconos redes sociales en contacto --- */
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 1px solid rgba(148, 163, 184, 0.5); /* slate-400 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(15, 23, 42, 0.7);   /* fondo oscuro */
+  color: #e5e7eb;
+  transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-icon:hover {
+  background-color: #16a34a;  /* verde */
+  border-color: #16a34a;
+  color: #ecfdf3;
+  transform: translateY(-2px);
+}
+
+/* Enlaces del mapa del sitio */
+.footer-link {
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 2px 0;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #bbf7d0; /* verde claro */
+}
+/* --- Iconos redes sociales en contacto  FIN--- */
+
+/* Botón flotante WhatsApp INICIO */
+#waFloating {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 70px;
+  height: 70px;
+  border-radius: 9999px;
+  background-color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  z-index: 999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+#waFloating svg {
+  width: 36px;
+  height: 36px;
+}
+
+#waFloating:hover {
+  background-color: #15803d;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+}
+/* Botón flotante WhatsApp  FIN */
+/* Evitar que los títulos de líneas queden ocultos bajo el header sticky */
+.section-anchor-offset {
+  scroll-margin-top: 7rem; /* Ajusta 7rem según la altura real del header */
+}

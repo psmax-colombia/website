@@ -1,0 +1,242 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "es"
+
+collections:
+  # =========================
+  # AJUSTES DEL SITIO
+  # =========================
+  - name: "site"
+    label: "Ajustes del sitio"
+    files:
+      - name: "global"
+        label: "Configuración general"
+        file: "content/site.json"
+        fields:
+          # Branding
+          - { label: "Nombre del sitio", name: "siteName", widget: "string" }
+          - { label: "Logo", name: "logo", widget: "image" }
+
+          # Hero
+          - label: "Título principal (Hero)"
+            name: "heroTitle"
+            widget: "string"
+            hint: "Ej: Productos profesionales para aseo y desinfección"
+
+          - label: "Subtítulo (Hero)"
+            name: "heroSubtitle"
+            widget: "text"
+
+          # =========================
+          # CONTACTO
+          # =========================
+          - label: "Correo"
+            name: "email"
+            widget: "string"
+            hint: "Ej: contacto@psmaxmultisoluciones.com"
+
+          - label: "Teléfono (formato internacional)"
+            name: "phone"
+            widget: "string"
+            required: false
+            hint: "Ej: +573001234567"
+            pattern:
+              [
+                "^\\+?[1-9]\\d{7,14}$",
+                "Usa formato internacional. Ej: +573001234567",
+              ]
+
+          - label: "Dirección"
+            name: "address"
+            widget: "string"
+            required: false
+            hint: "Ej: Bogotá, Colombia"
+
+          - label: "WhatsApp (formato internacional)"
+            name: "whatsapp"
+            widget: "string"
+            hint: "Ej: 573001234567 (solo números) o +573001234567"
+            pattern:
+              [
+                "^\\+?[1-9]\\d{7,14}$",
+                "Usa formato internacional. Ej: 573001234567",
+              ]
+
+          - label: "Mensaje WhatsApp"
+            name: "whatsappMessage"
+            widget: "text"
+            required: false
+            hint: "Mensaje que se abrirá automáticamente al dar clic en Contáctanos"
+
+          # =========================
+          # REDES SOCIALES
+          # =========================
+          - label: "Facebook (URL)"
+            name: "socialFacebook"
+            widget: "string"
+            required: false
+            hint: "Ej: https://facebook.com/psmax..."
+            pattern:
+              [
+                "^(https?:\\/\\/).+",
+                "Debe ser una URL válida (iniciar con http:// o https://)",
+              ]
+
+          - label: "Instagram (URL)"
+            name: "socialInstagram"
+            widget: "string"
+            required: false
+            hint: "Ej: https://instagram.com/psmax..."
+            pattern:
+              [
+                "^(https?:\\/\\/).+",
+                "Debe ser una URL válida (iniciar con http:// o https://)",
+              ]
+
+          - label: "LinkedIn (URL)"
+            name: "socialLinkedin"
+            widget: "string"
+            required: false
+            hint: "Ej: https://linkedin.com/company/psmax..."
+            pattern:
+              [
+                "^(https?:\\/\\/).+",
+                "Debe ser una URL válida (iniciar con http:// o https://)",
+              ]
+
+          # =========================
+          # SLIDES HERO
+          # =========================
+          - label: "Slides del Hero"
+            name: "heroSlides"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Imagen", name: "image", widget: "image" }
+              - {
+                  label: "Orden",
+                  name: "order",
+                  widget: "number",
+                  default: 1,
+                  required: false,
+                }
+
+          # =========================
+          # LÍNEAS DE PRODUCTO (HOME)
+          # =========================
+          - label: "Líneas de producto (Home)"
+            name: "productLines"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Descripción", name: "description", widget: "text" }
+              - {
+                  label: "Icono",
+                  name: "icon",
+                  widget: "string",
+                  hint: "Ej: laundry, spray, utensils, hand",
+                }
+              - {
+                  label: "Anchor",
+                  name: "anchor",
+                  widget: "string",
+                  hint: "Ej: aseo-de-superficies",
+                }
+              - {
+                  label: "Orden",
+                  name: "order",
+                  widget: "number",
+                  default: 1,
+                  required: false,
+                }
+
+  # =========================
+  # PRODUCTOS
+  # =========================
+  - name: "productos"
+    label: "Productos"
+    folder: "content/productos"
+    format: "json"
+    extension: "json"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{linea}} / {{categoria}}"
+    sortable_fields: ["title", "linea", "categoria", "published"]
+    fields:
+      - {
+          label: "Publicado",
+          name: "published",
+          widget: "boolean",
+          default: true,
+        }
+      - {
+          label: "Orden",
+          name: "order",
+          widget: "number",
+          default: 1,
+          required: false,
+        }
+
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Línea", name: "linea", widget: "string" }
+      - { label: "Categoría", name: "categoria", widget: "string" }
+
+      - {
+          label: "Descripción corta",
+          name: "excerpt",
+          widget: "text",
+          required: false,
+        }
+      - {
+          label: "Descripción larga",
+          name: "description",
+          widget: "text",
+          required: false,
+        }
+
+      - label: "Imagen"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: "PNG/JPG de buena calidad"
+
+      - label: "Ficha técnica (PDF)"
+        name: "ficha"
+        widget: "file"
+        required: false
+        hint: "Sube un PDF si aplica"
+
+  # =========================
+  # ÍNDICE DE PRODUCTOS (PUBLICADOS)
+  # =========================
+  - name: "productos_index"
+    label: "Productos publicados"
+    files:
+      - name: "index"
+        label: "Listado de productos visibles"
+        file: "content/products_index.json"
+        fields:
+          - label: "Productos"
+            name: "items"
+            widget: "list"
+            summary: "Producto: {{fields.product}}"
+            hint: "Selecciona los productos que aparecerán en la web"
+            fields:
+              - label: "Producto"
+                name: "product"
+                widget: "relation"
+                collection: "productos"
+                search_fields: ["title", "linea", "categoria"]
+                value_field: "{{slug}}"
+                display_fields: ["title", "linea", "categoria"]
