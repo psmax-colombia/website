@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PS Max Multisoluciones</title>
   <meta name="description" content="Más de 10 años ofreciendo soluciones profesionales en lavandería, aseo y desinfección. PS Max Multisoluciones - Calidad, experiencia y confianza." />
-  <link rel="icon" type="image/png" href="/assets/img/logo-psmax.png" />
+  <link rel="icon" type="image/png" href="/assets/uploads/logopsmax.png" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,7 +47,7 @@
   <div class="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
     <a href="#" class="flex items-center">
       <!-- logo en le menu header -->
-      <img id="siteLogo" src="/assets/img/logo-psmax.png" alt="PS Max"
+      <img id="siteLogo" src="/assets/uploads/logopsmax.png" alt="PS Max"
            class="max-h-12 sm:max-h-14 md:max-h-20 w-auto object-contain transition-all duration-300" />
     </a>
 
@@ -109,7 +109,7 @@
 <!-- EXPERIENCIA -->
 <section id="experiencia" class="bg-gradient-to-b from-primary-50/60 to-white">
   <div id="expInner" class="container mx-auto px-4 py-12 md:py-16 text-center flex flex-col items-center">
-    <img id="imgExperiencia" src="/assets/img/logo-psmax.png" alt="PS Max" class="mx-auto opacity-80" />
+    <img id="imgExperiencia" src="/assets/uploads/logopsmax.png" alt="PS Max" class="mx-auto opacity-80" />
     <p id="experienceText" class="mt-4 text-lg md:text-xl max-w-4xl mx-auto text-slate-700">
       Contamos con más de 10 años de experiencia ofreciendo los mejores productos para el aseo y la desinfección.
     </p>
@@ -215,30 +215,94 @@
       <h2 class="text-2xl md:text-3xl font-bold text-primary-800">Solicita una demostración</h2>
       <p class="mt-3 text-slate-600">Déjanos tus datos y un asesor te contactará para programar una visita o demostración virtual.</p>
     </div>
-    <form class="demo-form-card rounded-2xl p-6 grid gap-3">
-      <input class="px-4 py-3 rounded-xl border border-slate-300" placeholder="Empresa" />
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <input class="px-4 py-3 rounded-xl border border-slate-300" placeholder="Nombre" />
-        <input class="px-4 py-3 rounded-xl border border-slate-300" placeholder="Teléfono" />
-      </div>
-      <input class="px-4 py-3 rounded-xl border border-slate-300" placeholder="Correo" type="email" />
-      <select class="px-4 py-3 rounded-xl border border-slate-300">
-        <option>Sector: Hospitalario</option>
-        <option>Sector: Hotelería</option>
-        <option>Sector: Institucional</option>
-      </select>
-      <select class="px-4 py-3 rounded-xl border border-slate-300">
-        <option>Interés: Lavandería</option>
-        <option>Interés: Aseo de superficies</option>
-        <option>Interés: Aseo de cocinas</option>
-        <option>Interés: Cuidado personal</option>
-      </select>
-      <textarea class="px-4 py-3 rounded-xl border border-slate-300" rows="4" placeholder="Cuéntanos sobre tu necesidad"></textarea>
-      <label class="flex items-start gap-2 text-sm text-slate-600">
-        <input type="checkbox" /> Autorizo el tratamiento de datos personales.
-      </label>
-      <button class="px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white">Enviar</button>
-    </form>
+    <form
+  name="demostracion"
+  method="POST"
+  data-netlify="true"
+  data-netlify-honeypot="bot-field"
+  action="/gracias.html"
+  class="demo-form-card rounded-2xl p-6 grid gap-3"
+>
+  <!-- Netlify necesita esto -->
+  <input type="hidden" name="form-name" value="demostracion" />
+
+  <!-- Honeypot anti-spam (oculto) -->
+  <p class="hidden">
+    <label>Don’t fill this out: <input name="bot-field" /></label>
+  </p>
+
+  <input
+    class="px-4 py-3 rounded-xl border border-slate-300"
+    placeholder="Empresa"
+    name="empresa"
+    required
+  />
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <input
+      class="px-4 py-3 rounded-xl border border-slate-300"
+      placeholder="Nombre"
+      name="nombre"
+      required
+    />
+    <input
+      class="px-4 py-3 rounded-xl border border-slate-300"
+      placeholder="Teléfono"
+      name="telefono"
+      inputmode="tel"
+      required
+    />
+  </div>
+
+  <input
+    class="px-4 py-3 rounded-xl border border-slate-300"
+    placeholder="Correo"
+    type="email"
+    name="correo"
+    required
+  />
+
+  <select
+    class="px-4 py-3 rounded-xl border border-slate-300"
+    name="sector"
+    required
+  >
+    <option value="" selected disabled>Selecciona el sector</option>
+    <option value="Hospitalario">Hospitalario</option>
+    <option value="Hotelería">Hotelería</option>
+    <option value="Institucional">Institucional</option>
+    <option value="Industrial">Industrial</option>
+  </select>
+
+  <select
+    class="px-4 py-3 rounded-xl border border-slate-300"
+    name="interes"
+    required
+  >
+    <option value="" selected disabled>Selecciona el interés</option>
+    <option value="Lavandería">Lavandería</option>
+    <option value="Aseo de superficies">Aseo de superficies</option>
+    <option value="Aseo de cocinas">Aseo de cocinas</option>
+    <option value="Cuidado personal">Cuidado personal</option>
+  </select>
+
+  <textarea
+    class="px-4 py-3 rounded-xl border border-slate-300"
+    rows="4"
+    placeholder="Cuéntanos sobre tu necesidad"
+    name="necesidad"
+    required
+  ></textarea>
+
+  <label class="flex items-start gap-2 text-sm text-slate-600">
+    <input type="checkbox" name="acepta_tratamiento_datos" required />
+    Autorizo el tratamiento de datos personales.
+  </label>
+
+  <button type="submit" class="px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white">
+    Enviar
+  </button>
+</form>
   </div>
 </section>
 

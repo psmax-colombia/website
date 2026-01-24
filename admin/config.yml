@@ -142,12 +142,6 @@ collections:
               - { label: "Título", name: "title", widget: "string" }
               - { label: "Descripción", name: "description", widget: "text" }
               - {
-                  label: "Icono",
-                  name: "icon",
-                  widget: "string",
-                  hint: "Ej: laundry, spray, utensils, hand",
-                }
-              - {
                   label: "Anchor",
                   name: "anchor",
                   widget: "string",

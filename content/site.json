@@ -27,7 +27,7 @@
   "imgExperienciaGap": 2,
   "logo": "/assets/uploads/logopsmax.png",
   "socialLinkedin": "https://www.linkedin.com/company/psmaxmultisoluciones",
-  "phone": "573000000000",
+  "phone": "573173657030",
   "imgExperiencia": "/assets/uploads/imgexp.png",
   "productLines": [
     {
@@ -59,8 +59,9 @@
       "anchor": "cuidado-personal"
     }
   ],
-  "whatsapp": "+57 313 4028929",
+  "whatsapp": "+573173657030",
   "heroSubtitle": "Productos diseñados para optimizar procesos, garantizar limpieza profunda y prolongar la vida útil de los textiles.",
+  "siteName": "PsMax",
   "logoHeight": 80,
   "socialFacebook": "https://facebook.com/psmaxmultisoluciones",
   "address": "Bogotá, Colombia",
@@ -92,6 +93,6 @@
       "ctaHref": "#demo"
     }
   ],
-  "email": "contacto@psmaxmultisoluciones.com",
+  "email": "psmaxsas@hotmail.com",
   "heroTitle": "Soluciones para Lavandería Institucional y Hospitalaria"
 }
