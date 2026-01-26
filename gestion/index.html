@@ -19,32 +19,45 @@
 </head>
 <body>
   
-  <!-- Netlify Identity Widget (necesario para invite_token / signup) -->
+  <!-- Netlify Identity Widget -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
 <script>
   (function () {
-    if (!window.netlifyIdentity) return;
+    // 1) Capturar invite_token apenas llegue la página (ANTES de que Decap cambie el hash)
+    var hash = window.location.hash || "";
+    var match = hash.match(/invite_token=([^&]+)/);
 
-    // 1) Inicializa Identity (IMPORTANTE)
+    if (match && match[1]) {
+      sessionStorage.setItem("invite_token", match[1]);
+    }
+
+    // 2) Inicializar Identity
+    if (!window.netlifyIdentity) return;
     window.netlifyIdentity.init();
 
-    // 2) Si vienes con invite_token, abre signup automáticamente
+    // 3) Si hay token guardado, forzar flujo de signup
     window.netlifyIdentity.on("init", function (user) {
-      var hasInvite = window.location.hash.includes("invite_token=");
-      if (hasInvite && !user) {
-        window.netlifyIdentity.open("signup");
+      var token = sessionStorage.getItem("invite_token");
+      if (token && !user) {
+        // reinyecta el hash para que Identity lo detecte
+        window.location.hash = "invite_token=" + token;
+
+        // abre el modal de signup
+        setTimeout(function () {
+          window.netlifyIdentity.open("signup");
+        }, 200);
       }
     });
 
-    // 3) Cuando haga login, vuelve a /gestion/
+    // 4) Cuando haga login, limpiar token y volver a /gestion/
     window.netlifyIdentity.on("login", function () {
+      sessionStorage.removeItem("invite_token");
       window.netlifyIdentity.close();
       window.location.href = "/gestion/";
     });
   })();
 </script>
-
   <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
