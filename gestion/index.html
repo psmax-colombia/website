@@ -18,13 +18,31 @@
   </style>
 </head>
 <body>
+  <!-- Netlify Identity Widget (necesario para invite_token / signup) -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<script>
+  // Si vienes desde un link de invitación, abre el modal de signup automáticamente
+  if (window.location.hash.includes('invite_token=')) {
+    window.netlifyIdentity && window.netlifyIdentity.on('init', () => {
+      window.netlifyIdentity.open('signup');
+    });
+  }
+
+  // Opcional: cuando haga login, vuelve a /gestion/
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("login", () => {
+      document.location.href = "/gestion/";
+    });
+  }
+</script>
 
   <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
   <script>
     // ==========================================
-    // Preview "tipo tarjeta" (similar a tu web)
+    // Preview "tipo tarjeta"
     // ==========================================
     var ProductPreview = createClass({
       render: function () {
@@ -38,7 +56,7 @@
         var published = entry.getIn(['data', 'published']);
         var isPublished = (published === true || published === 'true');
 
-        // Colores / estilo aproximado a tu sitio
+        // Colores / 
         var COLORS = {
           border: 'rgba(16, 185, 129, 0.28)',   // verde suave
           shadow: 'rgba(2, 6, 23, 0.08)',
