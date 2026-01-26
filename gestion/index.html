@@ -18,23 +18,31 @@
   </style>
 </head>
 <body>
+  
   <!-- Netlify Identity Widget (necesario para invite_token / signup) -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
 <script>
-  // Si vienes desde un link de invitación, abre el modal de signup automáticamente
-  if (window.location.hash.includes('invite_token=')) {
-    window.netlifyIdentity && window.netlifyIdentity.on('init', () => {
-      window.netlifyIdentity.open('signup');
-    });
-  }
+  (function () {
+    if (!window.netlifyIdentity) return;
 
-  // Opcional: cuando haga login, vuelve a /gestion/
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("login", () => {
-      document.location.href = "/gestion/";
+    // 1) Inicializa Identity (IMPORTANTE)
+    window.netlifyIdentity.init();
+
+    // 2) Si vienes con invite_token, abre signup automáticamente
+    window.netlifyIdentity.on("init", function (user) {
+      var hasInvite = window.location.hash.includes("invite_token=");
+      if (hasInvite && !user) {
+        window.netlifyIdentity.open("signup");
+      }
     });
-  }
+
+    // 3) Cuando haga login, vuelve a /gestion/
+    window.netlifyIdentity.on("login", function () {
+      window.netlifyIdentity.close();
+      window.location.href = "/gestion/";
+    });
+  })();
 </script>
 
   <!-- Decap CMS -->
