@@ -5,226 +5,205 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Administración — PS Max Multisoluciones</title>
 
-  <!-- Netlify Identity Widget -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
   <style>
-    body { background: #f8fafc; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .nc-appHeader { background: #ffffff !important; box-shadow: 0 2px 12px rgba(0,0,0,.08) !important; }
+    body {
+      background: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+    }
+    .nc-appHeader {
+      background: #ffffff !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08) !important;
+    }
     .nc-appHeader h1 { font-weight: 600; }
   </style>
 </head>
 
 <body>
-<script>
-(function () {
-  function getInviteTokenFromHashOrQuery() {
-    var h = window.location.hash || "";
-    var m = h.match(/invite_token=([^&]+)/);
-    var q = new URLSearchParams(window.location.search);
-    return (m && m[1]) || q.get("invite_token") || "";
-  }
+  <!-- (Opcional) placeholder para que no se vea “blanco” si algo tarda -->
+  <div id="boot" style="padding:16px;color:#334155;font-size:14px;">
+    Cargando panel de administración…
+  </div>
 
-  function loadDecapOnce() {
-    if (window.__decapLoaded) return;
-    window.__decapLoaded = true;
+  <!-- Netlify Identity Widget (OBLIGATORIO para invites) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-    var s = document.createElement("script");
-    s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
-    s.onload = function () {
-      // Decap ya está cargado: aquí ya existen CMS/createClass/h
-      // Tu código de preview (abajo) se ejecutará normal.
-    };
-    document.body.appendChild(s);
-  }
+  <!-- Decap CMS (cárgalo SIEMPRE, estable) -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
-  var token = getInviteTokenFromHashOrQuery();
-  if (token) sessionStorage.setItem("invite_token", token);
+  <script>
+    (function () {
+      function hasInviteToken() {
+        return (window.location.hash || "").includes("invite_token=");
+      }
 
-  if (!window.netlifyIdentity) {
-    loadDecapOnce();
-    return;
-  }
+      // Si Identity no está disponible, no hacemos nada (pero Decap igual carga)
+      if (!window.netlifyIdentity) return;
 
-  window.netlifyIdentity.init();
+      // Inicializa Identity y si hay invite_token abre SIGNUP
+      window.netlifyIdentity.on("init", function (user) {
+        // Quita el placeholder si ya estamos corriendo JS
+        var boot = document.getElementById("boot");
+        if (boot) boot.style.display = "none";
 
-  window.netlifyIdentity.on("init", function (user) {
-    var stored = sessionStorage.getItem("invite_token");
+        if (hasInviteToken() && !user) {
+          // IMPORTANTÍSIMO:
+          // NO cambies el hash aquí. Déjalo tal cual con invite_token.
+          // Solo abre el modal signup.
+          window.netlifyIdentity.open("signup");
+        }
+      });
 
-    // 👉 Si viene por invitación y NO hay user, abre SIGNUP
-    if (stored && !user) {
-      // IMPORTANTÍSIMO: hash SIN "#"
-      window.location.hash = "invite_token=" + stored;
+      window.netlifyIdentity.on("login", function () {
+        // Al loguear, cierra modal y envía a la ruta normal de Decap
+        window.netlifyIdentity.close();
+        window.location.hash = "/"; // deja "#/" correctamente
+      });
 
-      setTimeout(function () {
-        window.netlifyIdentity.open("signup");
-      }, 150);
+      // dispara init
+      window.netlifyIdentity.init();
+    })();
+  </script>
 
-      // no cargamos Decap todavía
-      return;
-    }
+  <script>
+    // Tu preview: espera a que CMS exista
+    (function waitForCMS() {
+      if (!window.CMS || !window.createClass || !window.h) {
+        return setTimeout(waitForCMS, 50);
+      }
 
-    // 👉 Caso normal: carga Decap (muestra el botón de login o el CMS)
-    loadDecapOnce();
-  });
+      var ProductPreview = createClass({
+        render: function () {
+          var entry = this.props.entry;
+          var title = entry.getIn(['data', 'title']) || '';
+          var excerpt = entry.getIn(['data', 'excerpt']) || '';
+          var image = entry.getIn(['data', 'image']) || '';
+          var linea = entry.getIn(['data', 'linea']) || '';
+          var categoria = entry.getIn(['data', 'categoria']) || '';
+          var ficha = entry.getIn(['data', 'ficha']) || '';
+          var published = entry.getIn(['data', 'published']);
+          var isPublished = (published === true || published === 'true');
 
-  window.netlifyIdentity.on("login", function () {
-    sessionStorage.removeItem("invite_token");
-    window.netlifyIdentity.close();
+          var COLORS = {
+            border: 'rgba(16, 185, 129, 0.28)',
+            shadow: 'rgba(2, 6, 23, 0.08)',
+            title: '#166534',
+            text: '#334155',
+            muted: 'rgba(15, 23, 42, 0.60)',
+            chipBg: 'rgba(22, 101, 52, 0.10)',
+            chipText: '#166534',
+            bg: '#ffffff'
+          };
 
-    // IMPORTANTÍSIMO: hash SIN "#"
-    // (esto deja el hash como "#/" correctamente)
-    window.location.hash = "/";
+          var card = {
+            background: COLORS.bg,
+            border: '1px solid ' + COLORS.border,
+            borderRadius: '18px',
+            boxShadow: '0 10px 24px ' + COLORS.shadow,
+            overflow: 'hidden',
+            maxWidth: '420px'
+          };
 
-    loadDecapOnce();
-  });
-})();
-</script>
+          var header = { padding: '18px 18px 8px 18px' };
+          var titleStyle = { margin: 0, fontSize: '18px', fontWeight: 700, letterSpacing: '0.2px', color: COLORS.title };
+          var metaRow = { marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' };
 
-<script>
-  // Espera a que Decap esté cargado antes de registrar previews
-  // (si decap aún no existe, reintenta un momento)
-  (function waitForCMS() {
-    if (!window.CMS || !window.createClass || !window.h) {
-      return setTimeout(waitForCMS, 50);
-    }
+          var chip = {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            borderRadius: '999px',
+            background: COLORS.chipBg,
+            color: COLORS.chipText,
+            fontSize: '12px',
+            fontWeight: 600,
+            lineHeight: 1
+          };
 
-    // ==========================================
-    // Preview "tipo tarjeta"
-    // ==========================================
-    var ProductPreview = createClass({
-      render: function () {
-        var entry = this.props.entry;
-        var title = entry.getIn(['data', 'title']) || '';
-        var excerpt = entry.getIn(['data', 'excerpt']) || '';
-        var image = entry.getIn(['data', 'image']) || '';
-        var linea = entry.getIn(['data', 'linea']) || '';
-        var categoria = entry.getIn(['data', 'categoria']) || '';
-        var ficha = entry.getIn(['data', 'ficha']) || '';
-        var published = entry.getIn(['data', 'published']);
-        var isPublished = (published === true || published === 'true');
+          var chipOff = {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            borderRadius: '999px',
+            background: 'rgba(239, 68, 68, 0.10)',
+            color: '#b91c1c',
+            fontSize: '12px',
+            fontWeight: 700,
+            lineHeight: 1
+          };
 
-        var COLORS = {
-          border: 'rgba(16, 185, 129, 0.28)',
-          shadow: 'rgba(2, 6, 23, 0.08)',
-          title: '#166534',
-          text: '#334155',
-          muted: 'rgba(15, 23, 42, 0.60)',
-          chipBg: 'rgba(22, 101, 52, 0.10)',
-          chipText: '#166534',
-          bg: '#ffffff'
-        };
+          var imgWrap = { padding: '0 18px 12px 18px' };
+          var imgBox = {
+            width: '100%',
+            height: '220px',
+            borderRadius: '14px',
+            border: '1px solid rgba(15, 23, 42, 0.10)',
+            background: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden'
+          };
 
-        var card = {
-          background: COLORS.bg,
-          border: '1px solid ' + COLORS.border,
-          borderRadius: '18px',
-          boxShadow: '0 10px 24px ' + COLORS.shadow,
-          overflow: 'hidden',
-          maxWidth: '420px'
-        };
+          var imgStyle = { width: '100%', height: '100%', objectFit: 'contain', display: 'block', padding: '10px' };
+          var body = { padding: '0 18px 18px 18px' };
+          var excerptStyle = { margin: 0, color: COLORS.text, fontSize: '14px', lineHeight: 1.6 };
 
-        var header = { padding: '18px 18px 8px 18px' };
-        var titleStyle = { margin: 0, fontSize: '18px', fontWeight: 700, letterSpacing: '0.2px', color: COLORS.title };
-        var metaRow = { marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' };
+          var linkRow = { marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+          var linkStyle = { display: 'inline-flex', gap: '6px', alignItems: 'center', textDecoration: 'none', color: '#1d4ed8', fontSize: '13px', fontWeight: 600 };
+          var noteStyle = { marginTop: '8px', fontSize: '12px', color: COLORS.muted };
 
-        var chip = {
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '6px 10px',
-          borderRadius: '999px',
-          background: COLORS.chipBg,
-          color: COLORS.chipText,
-          fontSize: '12px',
-          fontWeight: 600,
-          lineHeight: 1
-        };
-
-        var chipOff = {
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '6px 10px',
-          borderRadius: '999px',
-          background: 'rgba(239, 68, 68, 0.10)',
-          color: '#b91c1c',
-          fontSize: '12px',
-          fontWeight: 700,
-          lineHeight: 1
-        };
-
-        var imgWrap = { padding: '0 18px 12px 18px' };
-        var imgBox = {
-          width: '100%',
-          height: '220px',
-          borderRadius: '14px',
-          border: '1px solid rgba(15, 23, 42, 0.10)',
-          background: '#ffffff',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden'
-        };
-
-        var imgStyle = { width: '100%', height: '100%', objectFit: 'contain', display: 'block', padding: '10px' };
-        var body = { padding: '0 18px 18px 18px' };
-        var excerptStyle = { margin: 0, color: COLORS.text, fontSize: '14px', lineHeight: 1.6 };
-
-        var linkRow = { marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
-        var linkStyle = { display: 'inline-flex', gap: '6px', alignItems: 'center', textDecoration: 'none', color: '#1d4ed8', fontSize: '13px', fontWeight: 600 };
-        var noteStyle = { marginTop: '8px', fontSize: '12px', color: COLORS.muted };
-
-        return h('div', { style: { padding: '22px', fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif' } }, [
-          h('div', { style: card }, [
-            h('div', { style: header }, [
-              h('h2', { style: titleStyle }, title || 'Nombre del producto'),
-              h('div', { style: metaRow }, [
-                linea ? h('span', { style: chip }, ['Línea: ', linea]) : null,
-                categoria ? h('span', { style: chip }, ['Categoría: ', categoria]) : null,
-                isPublished ? h('span', { style: chip }, 'Publicado') : h('span', { style: chipOff }, 'No publicado')
-              ])
-            ]),
-
-            image ? h('div', { style: imgWrap }, [
-              h('div', { style: imgBox }, [
-                h('img', { src: image, alt: title, style: imgStyle })
-              ])
-            ]) : h('div', { style: imgWrap }, [
-              h('div', {
-                style: {
-                  ...imgStyle,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'rgba(15,23,42,.55)',
-                  fontSize: '13px',
-                  fontWeight: 600
-                }
-              }, 'Sin imagen (sube una en “Imagen”)')
-            ]),
-
-            h('div', { style: body }, [
-              excerpt
-                ? h('p', { style: excerptStyle }, excerpt)
-                : h('p', { style: { ...excerptStyle, color: COLORS.muted } }, 'Agrega una “Descripción corta” para que se vea aquí.'),
-
-              h('div', { style: linkRow }, [
-                h('span', { style: linkStyle }, ['Ver producto ', '→']),
-                ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅')
-                      : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
+          return h('div', { style: { padding: '22px', fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif' } }, [
+            h('div', { style: card }, [
+              h('div', { style: header }, [
+                h('h2', { style: titleStyle }, title || 'Nombre del producto'),
+                h('div', { style: metaRow }, [
+                  linea ? h('span', { style: chip }, ['Línea: ', linea]) : null,
+                  categoria ? h('span', { style: chip }, ['Categoría: ', categoria]) : null,
+                  isPublished ? h('span', { style: chip }, 'Publicado') : h('span', { style: chipOff }, 'No publicado')
+                ])
               ]),
 
-              h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
+              image ? h('div', { style: imgWrap }, [
+                h('div', { style: imgBox }, [
+                  h('img', { src: image, alt: title, style: imgStyle })
+                ])
+              ]) : h('div', { style: imgWrap }, [
+                h('div', {
+                  style: {
+                    ...imgStyle,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'rgba(15,23,42,.55)',
+                    fontSize: '13px',
+                    fontWeight: 600
+                  }
+                }, 'Sin imagen (sube una en “Imagen”)')
+              ]),
+
+              h('div', { style: body }, [
+                excerpt
+                  ? h('p', { style: excerptStyle }, excerpt)
+                  : h('p', { style: { ...excerptStyle, color: COLORS.muted } }, 'Agrega una “Descripción corta” para que se vea aquí.'),
+
+                h('div', { style: linkRow }, [
+                  h('span', { style: linkStyle }, ['Ver producto ', '→']),
+                  ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅')
+                        : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
+                ]),
+
+                h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
+              ])
             ])
-          ])
-        ]);
-      }
-    });
+          ]);
+        }
+      });
 
-    CMS.registerPreviewTemplate('productos', ProductPreview);
-  })();
-</script>
-
+      CMS.registerPreviewTemplate('productos', ProductPreview);
+    })();
+  </script>
 </body>
 </html>
