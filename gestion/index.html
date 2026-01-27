@@ -7,12 +7,12 @@
 
   <style>
     body {
+      margin: 0;
       background: #f8fafc;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
     }
-    .loading {
-      padding: 18px;
+    #loading {
+      padding: 16px;
       color: #0f172a;
       font-size: 14px;
     }
@@ -23,45 +23,61 @@
     .nc-appHeader h1 { font-weight: 600; }
   </style>
 
-  <!-- Netlify Identity Widget (OBLIGATORIO para invite/signup/login) -->
+  <!-- Netlify Identity Widget (DEBE ir antes de tu lógica) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 
 <body>
-  <div class="loading" id="loading">Cargando panel de administración…</div>
+  <div id="loading">Cargando panel de administración...</div>
 
   <script>
-  (function () {
-    // ========= helpers =========
-    function getInviteToken() {
-      // Preferimos query: /gestion/?invite_token=XXX
-      var q = new URLSearchParams(window.location.search);
-      var qt = q.get("invite_token");
+    (function () {
+      var loadingEl = document.getElementById("loading");
 
-      // Soportamos hash si llega así (pero lo convertimos a query internamente)
-      var h = window.location.hash || "";
-      var hm = h.match(/invite_token=([^&]+)/);
+      function setLoading(msg) {
+        if (loadingEl) loadingEl.textContent = msg;
+      }
 
-      return qt || (hm && hm[1]) || "";
-    }
+      function getInviteToken() {
+        // A) token viene en el hash: #invite_token=XXX
+        var h = window.location.hash || "";
+        var m1 = h.match(/invite_token=([^&]+)/);
 
-    function setLoading(msg) {
-      var el = document.getElementById("loading");
-      if (el) el.textContent = msg;
-    }
+        // B) por si alguna vez llega por query: ?invite_token=XXX
+        var q = new URLSearchParams(window.location.search);
+        var m2 = q.get("invite_token");
 
-    function loadDecapAndRegisterPreview() {
-      if (window.__decapLoaded) return;
-      window.__decapLoaded = true;
+        return (m1 && m1[1]) || m2 || "";
+      }
 
-      setLoading("Cargando Decap CMS…");
+      function loadDecapAndRegisterPreview() {
+        if (window.__decapLoaded) return;
+        window.__decapLoaded = true;
 
-      var s = document.createElement("script");
-      s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
-      s.onload = function () {
-        setLoading(""); // oculta texto
+        setLoading("Cargando Decap CMS...");
 
-        // ======= TU PREVIEW (igual al que ya tenías) =======
+        var s = document.createElement("script");
+        s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
+        s.onload = function () {
+          try {
+            registerPreviews(); // <- tu preview se registra aquí
+            setLoading("");     // limpia mensaje
+          } catch (e) {
+            console.error("Error registrando preview:", e);
+            setLoading("Error cargando el panel. Revisa consola (F12).");
+          }
+        };
+        s.onerror = function () {
+          setLoading("No se pudo cargar Decap CMS (bloqueo de red / CDN).");
+        };
+        document.body.appendChild(s);
+      }
+
+      // --- TU PREVIEW (igual al que tenías), pero dentro de una función ---
+      function registerPreviews() {
+        // Asegura que existan helpers de Decap
+        if (!window.CMS || !window.createClass || !window.h) return;
+
         var ProductPreview = createClass({
           render: function () {
             var entry = this.props.entry;
@@ -95,7 +111,6 @@
             };
 
             var header = { padding: '18px 18px 8px 18px' };
-
             var titleStyle = {
               margin: 0,
               fontSize: '18px',
@@ -146,7 +161,7 @@
               border: '1px solid rgba(15, 23, 42, 0.10)',
               background: '#ffffff',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: ' practition',
               justifyContent: 'center',
               overflow: 'hidden'
             };
@@ -160,7 +175,6 @@
             };
 
             var body = { padding: '0 18px 18px 18px' };
-
             var excerptStyle = {
               margin: 0,
               color: COLORS.text,
@@ -238,64 +252,60 @@
         });
 
         CMS.registerPreviewTemplate('productos', ProductPreview);
-      };
-
-      document.body.appendChild(s);
-    }
-
-    // ========= flujo principal =========
-    var token = getInviteToken();
-
-    // Guardamos token y LIMPIAMOS hash para que Decap no lo “pise”
-    if (token) {
-      sessionStorage.setItem("invite_token", token);
-
-      // Limpia URL (quita hash y query del token) para no interferir
-      var cleanUrl = window.location.origin + window.location.pathname + window.location.hash.replace(/invite_token=[^&]+/,'');
-      // Mejor: elimina query invite_token si venía por query
-      var url = new URL(window.location.href);
-      url.searchParams.delete("invite_token");
-      history.replaceState({}, "", url.pathname + (url.hash || ""));
-    }
-
-    if (!window.netlifyIdentity) {
-      setLoading("No se cargó Netlify Identity. Revisa el script del widget.");
-      return;
-    }
-
-    window.netlifyIdentity.init();
-
-    window.netlifyIdentity.on("init", function (user) {
-      var stored = sessionStorage.getItem("invite_token");
-
-      // Si hay invitación y NO hay sesión -> abre SIGNUP (creación de usuario)
-      if (stored && !user) {
-        setLoading("Abriendo invitación para crear usuario…");
-
-        // Identity lee el invite token desde el HASH, así que lo ponemos temporalmente
-        window.location.hash = "invite_token=" + stored;
-
-        setTimeout(function () {
-          window.netlifyIdentity.open("signup");
-        }, 150);
-
-        return; // NO cargues Decap aún
       }
 
-      // Si ya hay sesión, cargamos Decap
-      loadDecapAndRegisterPreview();
-    });
+      // ---- FLOW Identity + Invite ----
+      var token = getInviteToken();
+      if (token) sessionStorage.setItem("invite_token", token);
 
-    window.netlifyIdentity.on("login", function () {
-      // Limpia token y deja Decap en su ruta normal
-      sessionStorage.removeItem("invite_token");
-      window.netlifyIdentity.close();
+      if (!window.netlifyIdentity) {
+        setLoading("Netlify Identity no cargó. Revisa el script.");
+        return;
+      }
 
-      // Ahora sí, dejamos el hash que usa Decap
-      window.location.hash = "#/";
-      loadDecapAndRegisterPreview();
-    });
-  })();
+      setLoading("Inicializando acceso...");
+      window.netlifyIdentity.init();
+
+      window.netlifyIdentity.on("init", function (user) {
+        var stored = sessionStorage.getItem("invite_token");
+
+        // Caso invitación: abrir SIGNUP antes de cargar Decap
+        if (stored && !user) {
+          setLoading("Aceptando invitación... crea tu usuario.");
+          // Mantén el token en el hash (Identity lo detecta)
+          window.location.hash = "invite_token=" + stored;
+
+          setTimeout(function () {
+            window.netlifyIdentity.open("signup");
+          }, 200);
+
+          return;
+        }
+
+        // Si ya hay sesión, carga Decap de una vez
+        setLoading("Acceso listo. Cargando panel...");
+        loadDecapAndRegisterPreview();
+      });
+
+      window.netlifyIdentity.on("login", function () {
+        sessionStorage.removeItem("invite_token");
+        window.netlifyIdentity.close();
+
+        // Ahora sí deja el hash de Decap
+        window.location.hash = "#/";
+        loadDecapAndRegisterPreview();
+      });
+
+      window.netlifyIdentity.on("logout", function () {
+        // por si cierran sesión
+        window.location.reload();
+      });
+
+      window.netlifyIdentity.on("error", function (e) {
+        console.error("Identity error:", e);
+        setLoading("Error de Identity. Revisa consola (F12).");
+      });
+    })();
   </script>
 </body>
 </html>
