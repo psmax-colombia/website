@@ -224,24 +224,24 @@
                 ])
               ]) : h('div', { style: imgWrap }, [
                 h('div', {
-                  style: {
-                    ...imgStyle,
+                  style: Object.assign({}, imgStyle, {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'rgba(15,23,42,.55)',
                     fontSize: '13px',
                     fontWeight: 600
-                  }
+                  })
                 }, 'Sin imagen (sube una en “Imagen”)')
               ]),
               h('div', { style: body }, [
                 excerpt
                   ? h('p', { style: excerptStyle }, excerpt)
-                  : h('p', { style: { ...excerptStyle, color: COLORS.muted } }, 'Agrega una “Descripción corta” para que se vea aquí.'),
+                  : h('p', { style: Object.assign({}, excerptStyle, { color: COLORS.muted }) }, 'Agrega una “Descripción corta” para que se vea aquí.'),
                 h('div', { style: linkRow }, [
                   h('span', { style: linkStyle }, ['Ver producto ', '→']),
-                  ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅') : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
+                  ficha ? h('span', { style: Object.assign({}, noteStyle, { marginTop: 0 }) }, 'Ficha técnica: ✅')
+                        : h('span', { style: Object.assign({}, noteStyle, { marginTop: 0 }) }, 'Ficha técnica: —')
                 ]),
                 h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
               ])
@@ -267,8 +267,7 @@
           return;
         }
 
-        window.netlifyIdentity.init();
-
+        // ✅ IMPORTANTE: registrar listeners ANTES del init()
         window.netlifyIdentity.on("init", function (user) {
           var stored = sessionStorage.getItem("invite_token");
 
@@ -296,6 +295,18 @@
           window.location.hash = "#/";
           loadDecapAndRegister();
         });
+
+        window.netlifyIdentity.on("error", function (err) {
+          showError("Netlify Identity error: " + (err && err.message ? err.message : err));
+        });
+
+        // ✅ ahora sí inicializa
+        window.netlifyIdentity.init();
+
+        // ✅ fallback por si algún navegador no dispara init (raro)
+        setTimeout(function () {
+          if (!window.__decapLoaded) loadDecapAndRegister();
+        }, 1200);
 
       } catch (e) {
         showError("Error inicializando /gestion.\n\n" + (e && e.message ? e.message : e));
