@@ -7,304 +7,261 @@
 
   <style>
     body {
-      margin: 0;
       background: #f8fafc;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    #loading {
-      padding: 16px;
-      color: #0f172a;
-      font-size: 14px;
     }
     .nc-appHeader {
       background: #ffffff !important;
       box-shadow: 0 2px 12px rgba(0,0,0,.08) !important;
     }
     .nc-appHeader h1 { font-weight: 600; }
+    .loading {
+      padding: 14px 18px;
+      color: #334155;
+      font-size: 14px;
+    }
   </style>
 
-  <!-- Netlify Identity Widget (DEBE ir antes de tu lógica) -->
+  <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
-
-<body>
-  <div id="loading">Cargando panel de administración...</div>
 
   <script>
     (function () {
-      var loadingEl = document.getElementById("loading");
-
-      function setLoading(msg) {
-        if (loadingEl) loadingEl.textContent = msg;
-      }
-
-      function getInviteToken() {
-        // A) token viene en el hash: #invite_token=XXX
+      function getTokenFromHash() {
         var h = window.location.hash || "";
-        var m1 = h.match(/invite_token=([^&]+)/);
-
-        // B) por si alguna vez llega por query: ?invite_token=XXX
-        var q = new URLSearchParams(window.location.search);
-        var m2 = q.get("invite_token");
-
-        return (m1 && m1[1]) || m2 || "";
+        var m = h.match(/invite_token=([^&]+)/);
+        return m ? decodeURIComponent(m[1]) : "";
       }
 
-      function loadDecapAndRegisterPreview() {
+      function getTokenFromQuery() {
+        var qs = new URLSearchParams(window.location.search);
+        return qs.get("invite_token") || "";
+      }
+
+      function normalizeInviteToken() {
+        // Si llega como ?invite_token=..., conviértelo a #invite_token=...
+        var qToken = getTokenFromQuery();
+        var hToken = getTokenFromHash();
+
+        if (qToken && !hToken) {
+          // Mantén la ruta /gestion/ y pasa el token por hash (lo que Netlify Identity espera)
+          var base = window.location.origin + window.location.pathname.replace(/\/?$/, "/");
+          window.location.replace(base + "#invite_token=" + encodeURIComponent(qToken));
+          return true; // se va a recargar
+        }
+        return false;
+      }
+
+      function loadDecapOnce() {
         if (window.__decapLoaded) return;
         window.__decapLoaded = true;
-
-        setLoading("Cargando Decap CMS...");
 
         var s = document.createElement("script");
         s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
         s.onload = function () {
-          try {
-            registerPreviews(); // <- tu preview se registra aquí
-            setLoading("");     // limpia mensaje
-          } catch (e) {
-            console.error("Error registrando preview:", e);
-            setLoading("Error cargando el panel. Revisa consola (F12).");
-          }
-        };
-        s.onerror = function () {
-          setLoading("No se pudo cargar Decap CMS (bloqueo de red / CDN).");
+          // aquí ya existe CMS, createClass, h, etc.
+          // tu preview script puede ir después en el HTML sin problema
+          console.log("Decap CMS loaded");
         };
         document.body.appendChild(s);
       }
 
-      // --- TU PREVIEW (igual al que tenías), pero dentro de una función ---
-      function registerPreviews() {
-        // Asegura que existan helpers de Decap
-        if (!window.CMS || !window.createClass || !window.h) return;
+      // 1) Normaliza el token si viene por query (?invite_token=)
+      if (normalizeInviteToken()) return;
 
-        var ProductPreview = createClass({
-          render: function () {
-            var entry = this.props.entry;
-            var title = entry.getIn(['data', 'title']) || '';
-            var excerpt = entry.getIn(['data', 'excerpt']) || '';
-            var image = entry.getIn(['data', 'image']) || '';
-            var linea = entry.getIn(['data', 'linea']) || '';
-            var categoria = entry.getIn(['data', 'categoria']) || '';
-            var ficha = entry.getIn(['data', 'ficha']) || '';
-            var published = entry.getIn(['data', 'published']);
-            var isPublished = (published === true || published === 'true');
-
-            var COLORS = {
-              border: 'rgba(16, 185, 129, 0.28)',
-              shadow: 'rgba(2, 6, 23, 0.08)',
-              title: '#166534',
-              text: '#334155',
-              muted: 'rgba(15, 23, 42, 0.60)',
-              chipBg: 'rgba(22, 101, 52, 0.10)',
-              chipText: '#166534',
-              bg: '#ffffff'
-            };
-
-            var card = {
-              background: COLORS.bg,
-              border: '1px solid ' + COLORS.border,
-              borderRadius: '18px',
-              boxShadow: '0 10px 24px ' + COLORS.shadow,
-              overflow: 'hidden',
-              maxWidth: '420px'
-            };
-
-            var header = { padding: '18px 18px 8px 18px' };
-            var titleStyle = {
-              margin: 0,
-              fontSize: '18px',
-              fontWeight: 700,
-              letterSpacing: '0.2px',
-              color: COLORS.title
-            };
-
-            var metaRow = {
-              marginTop: '10px',
-              display: 'flex',
-              gap: '8px',
-              flexWrap: 'wrap'
-            };
-
-            var chip = {
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 10px',
-              borderRadius: '999px',
-              background: COLORS.chipBg,
-              color: COLORS.chipText,
-              fontSize: '12px',
-              fontWeight: 600,
-              lineHeight: 1
-            };
-
-            var chipOff = {
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 10px',
-              borderRadius: '999px',
-              background: 'rgba(239, 68, 68, 0.10)',
-              color: '#b91c1c',
-              fontSize: '12px',
-              fontWeight: 700,
-              lineHeight: 1
-            };
-
-            var imgWrap = { padding: '0 18px 12px 18px' };
-
-            var imgBox = {
-              width: '100%',
-              height: '220px',
-              borderRadius: '14px',
-              border: '1px solid rgba(15, 23, 42, 0.10)',
-              background: '#ffffff',
-              display: 'flex',
-              alignItems: ' practition',
-              justifyContent: 'center',
-              overflow: 'hidden'
-            };
-
-            var imgStyle = {
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              display: 'block',
-              padding: '10px'
-            };
-
-            var body = { padding: '0 18px 18px 18px' };
-            var excerptStyle = {
-              margin: 0,
-              color: COLORS.text,
-              fontSize: '14px',
-              lineHeight: 1.6
-            };
-
-            var linkRow = {
-              marginTop: '12px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            };
-
-            var linkStyle = {
-              display: 'inline-flex',
-              gap: '6px',
-              alignItems: 'center',
-              textDecoration: 'none',
-              color: '#1d4ed8',
-              fontSize: '13px',
-              fontWeight: 600
-            };
-
-            var noteStyle = {
-              marginTop: '8px',
-              fontSize: '12px',
-              color: COLORS.muted
-            };
-
-            return h('div', { style: { padding: '22px', fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif' } }, [
-              h('div', { style: card }, [
-                h('div', { style: header }, [
-                  h('h2', { style: titleStyle }, title || 'Nombre del producto'),
-                  h('div', { style: metaRow }, [
-                    linea ? h('span', { style: chip }, ['Línea: ', linea]) : null,
-                    categoria ? h('span', { style: chip }, ['Categoría: ', categoria]) : null,
-                    isPublished ? h('span', { style: chip }, 'Publicado') : h('span', { style: chipOff }, 'No publicado')
-                  ])
-                ]),
-
-                image ? h('div', { style: imgWrap }, [
-                  h('div', { style: imgBox }, [
-                    h('img', { src: image, alt: title, style: imgStyle })
-                  ])
-                ]) : h('div', { style: imgWrap }, [
-                  h('div', {
-                    style: {
-                      ...imgStyle,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'rgba(15,23,42,.55)',
-                      fontSize: '13px',
-                      fontWeight: 600
-                    }
-                  }, 'Sin imagen (sube una en “Imagen”)')
-                ]),
-
-                h('div', { style: body }, [
-                  excerpt
-                    ? h('p', { style: excerptStyle }, excerpt)
-                    : h('p', { style: { ...excerptStyle, color: COLORS.muted } }, 'Agrega una “Descripción corta” para que se vea aquí.'),
-
-                  h('div', { style: linkRow }, [
-                    h('span', { style: linkStyle }, ['Ver producto ', '→']),
-                    ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅') : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
-                  ]),
-
-                  h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
-                ])
-              ])
-            ]);
-          }
-        });
-
-        CMS.registerPreviewTemplate('productos', ProductPreview);
-      }
-
-      // ---- FLOW Identity + Invite ----
-      var token = getInviteToken();
+      // 2) Lee token desde hash
+      var token = getTokenFromHash();
       if (token) sessionStorage.setItem("invite_token", token);
 
+      // 3) Inicializa Identity
       if (!window.netlifyIdentity) {
-        setLoading("Netlify Identity no cargó. Revisa el script.");
+        loadDecapOnce();
         return;
       }
 
-      setLoading("Inicializando acceso...");
       window.netlifyIdentity.init();
 
       window.netlifyIdentity.on("init", function (user) {
         var stored = sessionStorage.getItem("invite_token");
 
-        // Caso invitación: abrir SIGNUP antes de cargar Decap
+        // Si hay invitación y NO hay user: abrir signup
         if (stored && !user) {
-          setLoading("Aceptando invitación... crea tu usuario.");
-          // Mantén el token en el hash (Identity lo detecta)
-          window.location.hash = "invite_token=" + stored;
-
+          // Importante: NO cambiamos el hash a "#/" aquí.
+          // Dejamos el invite_token intacto para que Identity lo use.
           setTimeout(function () {
             window.netlifyIdentity.open("signup");
-          }, 200);
-
+          }, 250);
           return;
         }
 
-        // Si ya hay sesión, carga Decap de una vez
-        setLoading("Acceso listo. Cargando panel...");
-        loadDecapAndRegisterPreview();
+        // Si ya hay sesión, carga el CMS
+        loadDecapOnce();
       });
 
       window.netlifyIdentity.on("login", function () {
+        // Ya logueado, limpia token y carga CMS
         sessionStorage.removeItem("invite_token");
         window.netlifyIdentity.close();
 
-        // Ahora sí deja el hash de Decap
-        window.location.hash = "#/";
-        loadDecapAndRegisterPreview();
+        // Ahora sí, si quieres, puedes llevar a la ruta del CMS
+        // (Decap usa hash routing internamente)
+        if (!window.location.hash || window.location.hash.indexOf("invite_token=") >= 0) {
+          window.location.hash = "#/";
+        }
+
+        loadDecapOnce();
+      });
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="loading">Cargando panel de administración…</div>
+
+  <!-- Tu script de preview puede ir AQUÍ, porque Decap se carga dinámicamente -->
+  <script>
+    // Espera a que Decap esté disponible y registra el preview
+    (function waitForCMS(){
+      if (!window.CMS || !window.createClass || !window.h) {
+        return setTimeout(waitForCMS, 120);
+      }
+
+      var ProductPreview = createClass({
+        render: function () {
+          var entry = this.props.entry;
+          var title = entry.getIn(['data', 'title']) || '';
+          var excerpt = entry.getIn(['data', 'excerpt']) || '';
+          var image = entry.getIn(['data', 'image']) || '';
+          var linea = entry.getIn(['data', 'linea']) || '';
+          var categoria = entry.getIn(['data', 'categoria']) || '';
+          var ficha = entry.getIn(['data', 'ficha']) || '';
+          var published = entry.getIn(['data', 'published']);
+          var isPublished = (published === true || published === 'true');
+
+          var COLORS = {
+            border: 'rgba(16, 185, 129, 0.28)',
+            shadow: 'rgba(2, 6, 23, 0.08)',
+            title: '#166534',
+            text: '#334155',
+            muted: 'rgba(15, 23, 42, 0.60)',
+            chipBg: 'rgba(22, 101, 52, 0.10)',
+            chipText: '#166534',
+            bg: '#ffffff'
+          };
+
+          var card = {
+            background: COLORS.bg,
+            border: '1px solid ' + COLORS.border,
+            borderRadius: '18px',
+            boxShadow: '0 10px 24px ' + COLORS.shadow,
+            overflow: 'hidden',
+            maxWidth: '420px'
+          };
+
+          var header = { padding: '18px 18px 8px 18px' };
+          var titleStyle = { margin: 0, fontSize: '18px', fontWeight: 700, letterSpacing: '0.2px', color: COLORS.title };
+          var metaRow = { marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' };
+
+          var chip = {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            borderRadius: '999px',
+            background: COLORS.chipBg,
+            color: COLORS.chipText,
+            fontSize: '12px',
+            fontWeight: 600,
+            lineHeight: 1
+          };
+
+          var chipOff = {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 10px',
+            borderRadius: '999px',
+            background: 'rgba(239, 68, 68, 0.10)',
+            color: '#b91c1c',
+            fontSize: '12px',
+            fontWeight: 700,
+            lineHeight: 1
+          };
+
+          var imgWrap = { padding: '0 18px 12px 18px' };
+          var imgBox = {
+            width: '100%',
+            height: '220px',
+            borderRadius: '14px',
+            border: '1px solid rgba(15, 23, 42, 0.10)',
+            background: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden'
+          };
+
+          var imgStyle = {
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            display: 'block',
+            padding: '10px'
+          };
+
+          var body = { padding: '0 18px 18px 18px' };
+          var excerptStyle = { margin: 0, color: COLORS.text, fontSize: '14px', lineHeight: 1.6 };
+          var linkRow = { marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+          var linkStyle = { display: 'inline-flex', gap: '6px', alignItems: 'center', textDecoration: 'none', color: '#1d4ed8', fontSize: '13px', fontWeight: 600 };
+          var noteStyle = { marginTop: '8px', fontSize: '12px', color: COLORS.muted };
+
+          return h('div', { style: { padding: '22px', fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif' } }, [
+            h('div', { style: card }, [
+              h('div', { style: header }, [
+                h('h2', { style: titleStyle }, title || 'Nombre del producto'),
+                h('div', { style: metaRow }, [
+                  linea ? h('span', { style: chip }, ['Línea: ', linea]) : null,
+                  categoria ? h('span', { style: chip }, ['Categoría: ', categoria]) : null,
+                  isPublished ? h('span', { style: chip }, 'Publicado') : h('span', { style: chipOff }, 'No publicado')
+                ])
+              ]),
+              image
+                ? h('div', { style: imgWrap }, [
+                    h('div', { style: imgBox }, [
+                      h('img', { src: image, alt: title, style: imgStyle })
+                    ])
+                  ])
+                : h('div', { style: imgWrap }, [
+                    h('div', {
+                      style: {
+                        height: '220px',
+                        borderRadius: '14px',
+                        border: '1px solid rgba(15, 23, 42, 0.10)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'rgba(15,23,42,.55)',
+                        fontSize: '13px',
+                        fontWeight: 600
+                      }
+                    }, 'Sin imagen (sube una en “Imagen”)')
+                  ]),
+              h('div', { style: body }, [
+                excerpt
+                  ? h('p', { style: excerptStyle }, excerpt)
+                  : h('p', { style: { ...excerptStyle, color: COLORS.muted } }, 'Agrega una “Descripción corta” para que se vea aquí.'),
+                h('div', { style: linkRow }, [
+                  h('span', { style: linkStyle }, ['Ver producto ', '→']),
+                  ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅') : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
+                ]),
+                h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
+              ])
+            ])
+          ]);
+        }
       });
 
-      window.netlifyIdentity.on("logout", function () {
-        // por si cierran sesión
-        window.location.reload();
-      });
-
-      window.netlifyIdentity.on("error", function (e) {
-        console.error("Identity error:", e);
-        setLoading("Error de Identity. Revisa consola (F12).");
-      });
+      CMS.registerPreviewTemplate('productos', ProductPreview);
     })();
   </script>
 </body>
