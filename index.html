@@ -7,21 +7,24 @@
   <meta name="description" content="Más de 10 años ofreciendo soluciones profesionales en lavandería, aseo y desinfección. PS Max Multisoluciones - Calidad, experiencia y confianza." />
   <link rel="icon" type="image/png" href="/assets/uploads/logopsmax.png" />
   <script>
-(function(){
-  // Si Netlify manda invite_token en hash en la HOME, lo convertimos a query en /gestion/
-  var h = window.location.hash || "";
-  if (h.includes("invite_token=") && !window.location.pathname.startsWith("/gestion")) {
-    var m = h.match(/invite_token=([^&]+)/);
-    if (m && m[1]) {
-      var token = encodeURIComponent(decodeURIComponent(m[1]));
-      window.location.replace("/gestion/?invite_token=" + token);
-    } else {
-      // fallback: manda al /gestion preservando hash
-      window.location.replace("/gestion/" + h);
+  (function () {
+    // Si Netlify manda invite_token en el hash en la HOME,
+    // redirige a /gestion/ manteniendo el token en el HASH (lo que Identity/Decap espera)
+    var h = window.location.hash || "";
+
+    if (h.includes("invite_token=") && !window.location.pathname.startsWith("/gestion")) {
+      var m = h.match(/invite_token=([^&]+)/);
+      if (m && m[1]) {
+        var token = m[1]; // ya viene en formato válido para hash
+        window.location.replace("/gestion/#invite_token=" + token);
+      } else {
+        // fallback: preserva el hash completo
+        window.location.replace("/gestion/" + h);
+      }
     }
-  }
-})();
+  })();
 </script>
+
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
