@@ -5,63 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Administración — PS Max Multisoluciones</title>
 
+  <!-- Netlify Identity Widget (OBLIGATORIO para invitaciones) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <style>
     body {
       background: #f8fafc;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    .nc-appHeader {
-      background: #ffffff !important;
-      box-shadow: 0 2px 12px rgba(0,0,0,.08) !important;
-    }
-    .nc-appHeader h1 { font-weight: 600; }
   </style>
 </head>
+
 <body>
-  
-  <!-- Netlify Identity Widget -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
 <script>
-  (function () {
-    // 1) Capturar invite_token apenas llegue la página (ANTES de que Decap cambie el hash)
-    var hash = window.location.hash || "";
-    var match = hash.match(/invite_token=([^&]+)/);
+(function () {
 
-    if (match && match[1]) {
-      sessionStorage.setItem("invite_token", match[1]);
-    }
+  // =============== Helpers ===============
+  function getInviteToken() {
+    // 1) hash: #invite_token=XXX
+    var h = window.location.hash || "";
+    var m1 = h.match(/invite_token=([^&]+)/);
 
-    // 2) Inicializar Identity
-    if (!window.netlifyIdentity) return;
-    window.netlifyIdentity.init();
+    // 2) query: ?invite_token=XXX (por si lo usas luego)
+    var q = new URLSearchParams(window.location.search);
+    var m2 = q.get("invite_token");
 
-    // 3) Si hay token guardado, forzar flujo de signup
-    window.netlifyIdentity.on("init", function (user) {
-      var token = sessionStorage.getItem("invite_token");
-      if (token && !user) {
-        // reinyecta el hash para que Identity lo detecte
-        window.location.hash = "invite_token=" + token;
+    return (m1 && m1[1]) || m2 || "";
+  }
 
-        // abre el modal de signup
-        setTimeout(function () {
-          window.netlifyIdentity.open("signup");
-        }, 200);
-      }
-    });
+  // Registro de tu preview (se ejecuta cuando Decap ya existe)
+  function registerPreviews() {
+    if (!window.CMS || !window.createClass || !window.h) return;
 
-    // 4) Cuando haga login, limpiar token y volver a /gestion/
-    window.netlifyIdentity.on("login", function () {
-      sessionStorage.removeItem("invite_token");
-      window.netlifyIdentity.close();
-      window.location.href = "/gestion/";
-    });
-  })();
-</script>
-  <!-- Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
-  <script>
     // ==========================================
     // Preview "tipo tarjeta"
     // ==========================================
@@ -77,12 +53,11 @@
         var published = entry.getIn(['data', 'published']);
         var isPublished = (published === true || published === 'true');
 
-        // Colores / 
         var COLORS = {
-          border: 'rgba(16, 185, 129, 0.28)',   // verde suave
+          border: 'rgba(16, 185, 129, 0.28)',
           shadow: 'rgba(2, 6, 23, 0.08)',
-          title: '#166534',                    // verde oscuro
-          text: '#334155',                     // gris azulado
+          title: '#166534',
+          text: '#334155',
           muted: 'rgba(15, 23, 42, 0.60)',
           chipBg: 'rgba(22, 101, 52, 0.10)',
           chipText: '#166534',
@@ -98,9 +73,7 @@
           maxWidth: '420px'
         };
 
-        var header = {
-          padding: '18px 18px 8px 18px'
-        };
+        var header = { padding: '18px 18px 8px 18px' };
 
         var titleStyle = {
           margin: 0,
@@ -143,11 +116,9 @@
           lineHeight: 1
         };
 
-        var imgWrap = {
-          padding: '0 18px 12px 18px'
-        };
+        var imgWrap = { padding: '0 18px 12px 18px' };
 
-       var imgBox = {
+        var imgBox = {
           width: '100%',
           height: '220px',
           borderRadius: '14px',
@@ -158,19 +129,16 @@
           justifyContent: 'center',
           overflow: 'hidden'
         };
-        
+
         var imgStyle = {
           width: '100%',
           height: '100%',
-          objectFit: 'contain',   // ✅ importante
+          objectFit: 'contain',
           display: 'block',
           padding: '10px'
         };
 
-
-        var body = {
-          padding: '0 18px 18px 18px'
-        };
+        var body = { padding: '0 18px 18px 18px' };
 
         var excerptStyle = {
           margin: 0,
@@ -202,7 +170,6 @@
           color: COLORS.muted
         };
 
-        // Render
         return h('div', { style: { padding: '22px', fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif' } }, [
           h('div', { style: card }, [
             h('div', { style: header }, [
@@ -215,10 +182,10 @@
             ]),
 
             image ? h('div', { style: imgWrap }, [
-                h('div', { style: imgBox }, [
-                  h('img', { src: image, alt: title, style: imgStyle })
-                ])
-              ]) : h('div', { style: imgWrap }, [
+              h('div', { style: imgBox }, [
+                h('img', { src: image, alt: title, style: imgStyle })
+              ])
+            ]) : h('div', { style: imgWrap }, [
               h('div', {
                 style: {
                   ...imgStyle,
@@ -239,12 +206,11 @@
 
               h('div', { style: linkRow }, [
                 h('span', { style: linkStyle }, ['Ver producto ', '→']),
-                ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅') : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
+                ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅')
+                      : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
               ]),
 
-              h('div', { style: noteStyle },
-                'Vista previa estilo “tarjeta” (aproximada a la web).'
-              )
+              h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
             ])
           ])
         ]);
@@ -252,7 +218,65 @@
     });
 
     CMS.registerPreviewTemplate('productos', ProductPreview);
-  </script>
+  }
+
+  function loadDecap() {
+    if (window.__decapLoaded) return;
+    window.__decapLoaded = true;
+
+    var s = document.createElement("script");
+    s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
+    s.onload = function () {
+      // Cuando Decap ya existe, registramos previews
+      registerPreviews();
+    };
+    document.body.appendChild(s);
+  }
+
+  // =============== Start ===============
+  var token = getInviteToken();
+  if (token) sessionStorage.setItem("invite_token", token);
+
+  if (!window.netlifyIdentity) {
+    // fallback: si no hay identity, al menos muestra el CMS
+    loadDecap();
+    return;
+  }
+
+  window.netlifyIdentity.init();
+
+  window.netlifyIdentity.on("init", function (user) {
+    var stored = sessionStorage.getItem("invite_token");
+
+    // Si hay invite y NO hay user => abrir signup y NO cargar Decap todavía
+    if (stored && !user) {
+      // Mantener token en hash para que Identity lo reconozca
+      window.location.hash = "invite_token=" + stored;
+
+      setTimeout(function () {
+        window.netlifyIdentity.open("signup");
+      }, 150);
+
+      return;
+    }
+
+    // Si ya está logueado, ahora sí carga Decap
+    if (user) {
+      loadDecap();
+    }
+  });
+
+  window.netlifyIdentity.on("login", function () {
+    sessionStorage.removeItem("invite_token");
+    window.netlifyIdentity.close();
+
+    // Decap usa "#/" internamente
+    window.location.hash = "#/";
+    loadDecap();
+  });
+
+})();
+</script>
 
 </body>
 </html>
