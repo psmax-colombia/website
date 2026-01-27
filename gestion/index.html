@@ -27,23 +27,35 @@
       var err = document.getElementById("boot-err");
       var ok = document.getElementById("boot-msg");
       if (ok) ok.style.display = "none";
-      if (err) {
-        err.style.display = "block";
-        err.textContent = msg;
-      }
+      if (err) { err.style.display = "block"; err.textContent = msg; }
       console.error(msg);
     }
 
-    function getInviteToken() {
-      // hash: #invite_token=XXX
+    function getInviteTokenFromHash() {
+      // soporta: #invite_token=XXX o #/invite_token=XXX (por si alguien lo altera)
       var h = window.location.hash || "";
-      var m1 = h.match(/invite_token=([^&]+)/);
+      var m = h.match(/invite_token=([^&]+)/);
+      return (m && m[1]) ? decodeURIComponent(m[1]) : "";
+    }
 
-      // query: ?invite_token=XXX
+    function getInviteTokenFromQuery() {
       var q = new URLSearchParams(window.location.search);
-      var m2 = q.get("invite_token");
+      return q.get("invite_token") || "";
+    }
 
-      return (m1 && m1[1]) || m2 || "";
+    function normalizeInviteTokenToQuery() {
+      // Si viene en hash, pásalo a ?invite_token=... y limpia el hash (para que Decap no lo pise)
+      var token = getInviteTokenFromHash();
+      if (!token) return;
+
+      var url = new URL(window.location.href);
+      url.searchParams.set("invite_token", token);
+
+      // limpia el hash para evitar choque con Decap (#/)
+      url.hash = "";
+
+      // Reemplaza sin recargar
+      window.history.replaceState({}, "", url.toString());
     }
 
     function injectScript(url) {
@@ -53,13 +65,11 @@
         s.async = true;
         s.onload = resolve;
         s.onerror = function () { reject(new Error("No se pudo cargar: " + url)); };
-        // ✅ HEAD siempre existe (evita el error intermitente)
         document.head.appendChild(s);
       });
     }
 
     async function loadDecapAndRegister() {
-      // Evita doble carga
       if (window.__decapLoaded) return;
       window.__decapLoaded = true;
 
@@ -70,7 +80,6 @@
         return;
       }
 
-      // Espera a que CMS exista
       if (!window.CMS || !window.createClass || !window.h) {
         showError("Decap cargó pero CMS no está disponible. Revisa bloqueos (adblock) o CSP.");
         return;
@@ -224,24 +233,24 @@
                 ])
               ]) : h('div', { style: imgWrap }, [
                 h('div', {
-                  style: Object.assign({}, imgStyle, {
+                  style: {
+                    ...imgStyle,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'rgba(15,23,42,.55)',
                     fontSize: '13px',
                     fontWeight: 600
-                  })
+                  }
                 }, 'Sin imagen (sube una en “Imagen”)')
               ]),
               h('div', { style: body }, [
                 excerpt
                   ? h('p', { style: excerptStyle }, excerpt)
-                  : h('p', { style: Object.assign({}, excerptStyle, { color: COLORS.muted }) }, 'Agrega una “Descripción corta” para que se vea aquí.'),
+                  : h('p', { style: { ...excerptStyle, color: COLORS.muted } }, 'Agrega una “Descripción corta” para que se vea aquí.'),
                 h('div', { style: linkRow }, [
                   h('span', { style: linkStyle }, ['Ver producto ', '→']),
-                  ficha ? h('span', { style: Object.assign({}, noteStyle, { marginTop: 0 }) }, 'Ficha técnica: ✅')
-                        : h('span', { style: Object.assign({}, noteStyle, { marginTop: 0 }) }, 'Ficha técnica: —')
+                  ficha ? h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: ✅') : h('span', { style: { ...noteStyle, marginTop: 0 } }, 'Ficha técnica: —')
                 ]),
                 h('div', { style: noteStyle }, 'Vista previa estilo “tarjeta” (aproximada a la web).')
               ])
@@ -252,14 +261,17 @@
 
       CMS.registerPreviewTemplate('productos', ProductPreview);
 
-      // oculta mensaje de carga si quedó
       var ok = document.getElementById("boot-msg");
       if (ok) ok.style.display = "none";
     }
 
     function start() {
       try {
-        var token = getInviteToken();
+        // 1) Normaliza token hash -> query para que Decap no lo pise
+        normalizeInviteTokenToQuery();
+
+        // 2) Guarda token para usarlo en el flujo de signup
+        var token = getInviteTokenFromQuery();
         if (token) sessionStorage.setItem("invite_token", token);
 
         if (!window.netlifyIdentity) {
@@ -267,23 +279,22 @@
           return;
         }
 
-        // ✅ IMPORTANTE: registrar listeners ANTES del init()
+        // Evita que algo cargue antes del init
+        window.netlifyIdentity.init();
+
         window.netlifyIdentity.on("init", function (user) {
           var stored = sessionStorage.getItem("invite_token");
 
           // Si hay invite y NO hay user => abrir signup
           if (stored && !user) {
-            // Mantén hash “invite_token=...”
-            window.location.hash = "invite_token=" + stored;
-
+            // Asegura que el widget vea el token (en query ya está)
             setTimeout(function () {
               window.netlifyIdentity.open("signup");
             }, 150);
-
-            return; // no cargues decap aún
+            return; // NO cargues Decap todavía
           }
 
-          // Si ya hay sesión => carga decap
+          // Si ya hay sesión => carga Decap
           loadDecapAndRegister();
         });
 
@@ -291,29 +302,24 @@
           sessionStorage.removeItem("invite_token");
           window.netlifyIdentity.close();
 
-          // ir a ruta normal del CMS
-          window.location.hash = "#/";
+          // Limpia el invite_token del URL para que no quede pegado
+          var url = new URL(window.location.href);
+          url.searchParams.delete("invite_token");
+          window.history.replaceState({}, "", url.toString());
+
           loadDecapAndRegister();
         });
 
-        window.netlifyIdentity.on("error", function (err) {
-          showError("Netlify Identity error: " + (err && err.message ? err.message : err));
+        window.netlifyIdentity.on("logout", function () {
+          // Recarga limpio
+          window.location.href = "/gestion/";
         });
-
-        // ✅ ahora sí inicializa
-        window.netlifyIdentity.init();
-
-        // ✅ fallback por si algún navegador no dispara init (raro)
-        setTimeout(function () {
-          if (!window.__decapLoaded) loadDecapAndRegister();
-        }, 1200);
 
       } catch (e) {
         showError("Error inicializando /gestion.\n\n" + (e && e.message ? e.message : e));
       }
     }
 
-    // ✅ arranca cuando el DOM esté listo
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", start);
     } else {

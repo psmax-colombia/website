@@ -6,6 +6,22 @@
   <title>PS Max Multisoluciones</title>
   <meta name="description" content="Más de 10 años ofreciendo soluciones profesionales en lavandería, aseo y desinfección. PS Max Multisoluciones - Calidad, experiencia y confianza." />
   <link rel="icon" type="image/png" href="/assets/uploads/logopsmax.png" />
+  <script>
+(function(){
+  // Si Netlify manda invite_token en hash en la HOME, lo convertimos a query en /gestion/
+  var h = window.location.hash || "";
+  if (h.includes("invite_token=") && !window.location.pathname.startsWith("/gestion")) {
+    var m = h.match(/invite_token=([^&]+)/);
+    if (m && m[1]) {
+      var token = encodeURIComponent(decodeURIComponent(m[1]));
+      window.location.replace("/gestion/?invite_token=" + token);
+    } else {
+      // fallback: manda al /gestion preservando hash
+      window.location.replace("/gestion/" + h);
+    }
+  }
+})();
+</script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -35,17 +51,6 @@
     }
   }
 </script>
-<script>
-(function(){
-  if (window.location.hash && window.location.hash.includes("invite_token=")) {
-    // si NO estamos en /gestion, manda allá preservando el hash
-    if (!window.location.pathname.startsWith("/gestion")) {
-      window.location.replace("/gestion/" + window.location.hash);
-    }
-  }
-})();
-</script>
-
 
   <!-- Estilos personalizados -->
   <link rel="stylesheet" href="/assets/css/custom.css">
