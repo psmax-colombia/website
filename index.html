@@ -35,6 +35,17 @@
     }
   }
 </script>
+<script>
+(function(){
+  if (window.location.hash && window.location.hash.includes("invite_token=")) {
+    // si NO estamos en /gestion, manda allá preservando el hash
+    if (!window.location.pathname.startsWith("/gestion")) {
+      window.location.replace("/gestion/" + window.location.hash);
+    }
+  }
+})();
+</script>
+
 
   <!-- Estilos personalizados -->
   <link rel="stylesheet" href="/assets/css/custom.css">

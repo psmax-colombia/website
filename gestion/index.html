@@ -5,38 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Administración — PS Max Multisoluciones</title>
 
-  <!-- Netlify Identity Widget (OBLIGATORIO para invitaciones) -->
+  <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <style>
-    body {
-      background: #f8fafc;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+    body { background: #f8fafc; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .nc-appHeader { background: #ffffff !important; box-shadow: 0 2px 12px rgba(0,0,0,.08) !important; }
+    .nc-appHeader h1 { font-weight: 600; }
   </style>
 </head>
 
 <body>
-
 <script>
 (function () {
-
-  // =============== Helpers ===============
-  function getInviteToken() {
-    // 1) hash: #invite_token=XXX
+  function getInviteTokenFromHashOrQuery() {
     var h = window.location.hash || "";
-    var m1 = h.match(/invite_token=([^&]+)/);
-
-    // 2) query: ?invite_token=XXX (por si lo usas luego)
+    var m = h.match(/invite_token=([^&]+)/);
     var q = new URLSearchParams(window.location.search);
-    var m2 = q.get("invite_token");
-
-    return (m1 && m1[1]) || m2 || "";
+    return (m && m[1]) || q.get("invite_token") || "";
   }
 
-  // Registro de tu preview (se ejecuta cuando Decap ya existe)
-  function registerPreviews() {
-    if (!window.CMS || !window.createClass || !window.h) return;
+  function loadDecapOnce() {
+    if (window.__decapLoaded) return;
+    window.__decapLoaded = true;
+
+    var s = document.createElement("script");
+    s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
+    s.onload = function () {
+      // Decap ya está cargado: aquí ya existen CMS/createClass/h
+      // Tu código de preview (abajo) se ejecutará normal.
+    };
+    document.body.appendChild(s);
+  }
+
+  var token = getInviteTokenFromHashOrQuery();
+  if (token) sessionStorage.setItem("invite_token", token);
+
+  if (!window.netlifyIdentity) {
+    loadDecapOnce();
+    return;
+  }
+
+  window.netlifyIdentity.init();
+
+  window.netlifyIdentity.on("init", function (user) {
+    var stored = sessionStorage.getItem("invite_token");
+
+    // 👉 Si viene por invitación y NO hay user, abre SIGNUP
+    if (stored && !user) {
+      // IMPORTANTÍSIMO: hash SIN "#"
+      window.location.hash = "invite_token=" + stored;
+
+      setTimeout(function () {
+        window.netlifyIdentity.open("signup");
+      }, 150);
+
+      // no cargamos Decap todavía
+      return;
+    }
+
+    // 👉 Caso normal: carga Decap (muestra el botón de login o el CMS)
+    loadDecapOnce();
+  });
+
+  window.netlifyIdentity.on("login", function () {
+    sessionStorage.removeItem("invite_token");
+    window.netlifyIdentity.close();
+
+    // IMPORTANTÍSIMO: hash SIN "#"
+    // (esto deja el hash como "#/" correctamente)
+    window.location.hash = "/";
+
+    loadDecapOnce();
+  });
+})();
+</script>
+
+<script>
+  // Espera a que Decap esté cargado antes de registrar previews
+  // (si decap aún no existe, reintenta un momento)
+  (function waitForCMS() {
+    if (!window.CMS || !window.createClass || !window.h) {
+      return setTimeout(waitForCMS, 50);
+    }
 
     // ==========================================
     // Preview "tipo tarjeta"
@@ -74,21 +125,8 @@
         };
 
         var header = { padding: '18px 18px 8px 18px' };
-
-        var titleStyle = {
-          margin: 0,
-          fontSize: '18px',
-          fontWeight: 700,
-          letterSpacing: '0.2px',
-          color: COLORS.title
-        };
-
-        var metaRow = {
-          marginTop: '10px',
-          display: 'flex',
-          gap: '8px',
-          flexWrap: 'wrap'
-        };
+        var titleStyle = { margin: 0, fontSize: '18px', fontWeight: 700, letterSpacing: '0.2px', color: COLORS.title };
+        var metaRow = { marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' };
 
         var chip = {
           display: 'inline-flex',
@@ -117,7 +155,6 @@
         };
 
         var imgWrap = { padding: '0 18px 12px 18px' };
-
         var imgBox = {
           width: '100%',
           height: '220px',
@@ -130,45 +167,13 @@
           overflow: 'hidden'
         };
 
-        var imgStyle = {
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-          display: 'block',
-          padding: '10px'
-        };
-
+        var imgStyle = { width: '100%', height: '100%', objectFit: 'contain', display: 'block', padding: '10px' };
         var body = { padding: '0 18px 18px 18px' };
+        var excerptStyle = { margin: 0, color: COLORS.text, fontSize: '14px', lineHeight: 1.6 };
 
-        var excerptStyle = {
-          margin: 0,
-          color: COLORS.text,
-          fontSize: '14px',
-          lineHeight: 1.6
-        };
-
-        var linkRow = {
-          marginTop: '12px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        };
-
-        var linkStyle = {
-          display: 'inline-flex',
-          gap: '6px',
-          alignItems: 'center',
-          textDecoration: 'none',
-          color: '#1d4ed8',
-          fontSize: '13px',
-          fontWeight: 600
-        };
-
-        var noteStyle = {
-          marginTop: '8px',
-          fontSize: '12px',
-          color: COLORS.muted
-        };
+        var linkRow = { marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
+        var linkStyle = { display: 'inline-flex', gap: '6px', alignItems: 'center', textDecoration: 'none', color: '#1d4ed8', fontSize: '13px', fontWeight: 600 };
+        var noteStyle = { marginTop: '8px', fontSize: '12px', color: COLORS.muted };
 
         return h('div', { style: { padding: '22px', fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif' } }, [
           h('div', { style: card }, [
@@ -218,64 +223,7 @@
     });
 
     CMS.registerPreviewTemplate('productos', ProductPreview);
-  }
-
-  function loadDecap() {
-    if (window.__decapLoaded) return;
-    window.__decapLoaded = true;
-
-    var s = document.createElement("script");
-    s.src = "https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js";
-    s.onload = function () {
-      // Cuando Decap ya existe, registramos previews
-      registerPreviews();
-    };
-    document.body.appendChild(s);
-  }
-
-  // =============== Start ===============
-  var token = getInviteToken();
-  if (token) sessionStorage.setItem("invite_token", token);
-
-  if (!window.netlifyIdentity) {
-    // fallback: si no hay identity, al menos muestra el CMS
-    loadDecap();
-    return;
-  }
-
-  window.netlifyIdentity.init();
-
-  window.netlifyIdentity.on("init", function (user) {
-    var stored = sessionStorage.getItem("invite_token");
-
-    // Si hay invite y NO hay user => abrir signup y NO cargar Decap todavía
-    if (stored && !user) {
-      // Mantener token en hash para que Identity lo reconozca
-      window.location.hash = "invite_token=" + stored;
-
-      setTimeout(function () {
-        window.netlifyIdentity.open("signup");
-      }, 150);
-
-      return;
-    }
-
-    // Si ya está logueado, ahora sí carga Decap
-    if (user) {
-      loadDecap();
-    }
-  });
-
-  window.netlifyIdentity.on("login", function () {
-    sessionStorage.removeItem("invite_token");
-    window.netlifyIdentity.close();
-
-    // Decap usa "#/" internamente
-    window.location.hash = "#/";
-    loadDecap();
-  });
-
-})();
+  })();
 </script>
 
 </body>
