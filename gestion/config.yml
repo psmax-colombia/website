@@ -5,7 +5,7 @@ backend:
   base_url: https://TU-AUTH-SERVER.onrender.com
   auth_endpoint: auth
 
-local_backend: true
+local_backend: false
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
