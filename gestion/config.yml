@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: CLIENTE_USUARIO/CLIENTE_REPO
+  repo: psmax-colombia/website
   branch: main
-  base_url: https://TU-AUTH-SERVER.onrender.com
+  base_url: https://psmax-auth-server.onrender.com
   auth_endpoint: auth
 
 local_backend: false
