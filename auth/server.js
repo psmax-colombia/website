@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 
 // 👉 Endpoint principal que usa Decap CMS
 app.get("/auth", (req, res) => {
-  const redirectUri = `${req.protocol}://${req.get("host")}/callback`;
+  const redirectUri = `https://${req.get("host")}/callback`;
 
   const url = new URL("https://github.com/login/oauth/authorize");
   url.searchParams.set("client_id", GITHUB_CLIENT_ID);
