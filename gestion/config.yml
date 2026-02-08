@@ -1,14 +1,16 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: CLIENTE_USUARIO/CLIENTE_REPO
   branch: main
+  base_url: https://TU-AUTH-SERVER.onrender.com
+  auth_endpoint: auth
 
-local_backend: false
+local_backend: true
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
 
 locale: "es"
-
 collections:
   # =========================
   # AJUSTES DEL SITIO
