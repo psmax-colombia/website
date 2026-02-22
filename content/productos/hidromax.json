@@ -1,9 +1,16 @@
 {
   "published": true,
   "order": 1,
-  "linea": "Lavandería institucional y hospitalaria",
+  "linea": "Aseo y Superficies",
   "categoria": "Blanqueadores",
   "title": "HIDROMAX",
   "excerpt": "HIDROMAX es un blanqueador oxigenado en polvo de uso hotelero e industrial, diseñado para potenciar el lavado de prendas blancas y de color. Elimina manchas difíciles, realza la blancura y ayuda a desinfectar los tejidos sin deteriorarlos. Ideal para lavanderías industriales, hospitales, hoteles y procesos de lavado intensivo que requieren alta efectividad y rendimiento.",
-  "image": "/assets/uploads/hidromax.png"
+  "image": "/assets/uploads/hidromax.png",
+  "presentaciones": [
+    {
+      "empaque": "Botella",
+      "volumen": 4,
+      "unidad": "kg"
+    }
+  ]
 }

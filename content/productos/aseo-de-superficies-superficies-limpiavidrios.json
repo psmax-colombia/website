@@ -2,7 +2,14 @@
   "published": true,
   "excerpt": "El Limpiavidrios PS MAX es un limpiador especializado formulado para dejar superficies de vidrio completamente transparentes, sin empañarse y libres de marcas. Su acción desengrasante remueve polvo, huellas, manchas, residuos y suciedad común, proporcionando brillo instantáneo.\nEs ideal para oficinas, hoteles, cocinas, áreas institucionales, ventanas, vitrinas y superficies acrílicas, garantizando un acabado claro y profesional. Su presentación de 20 litros ofrece un rendimiento superior para operaciones de gran demanda.",
   "title": "LIMPIAVIDRIOS",
-  "linea": "Aseo de superficies",
+  "linea": "Aseo y Superficies",
   "categoria": "Superficies",
-  "image": "/assets/uploads/limpiavidrios.png"
+  "image": "/assets/uploads/limpiavidrios.png",
+  "presentaciones": [
+    {
+      "empaque": "Galón",
+      "volumen": 20,
+      "unidad": "L"
+    }
+  ]
 }

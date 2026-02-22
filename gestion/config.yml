@@ -11,6 +11,7 @@ media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
 
 locale: "es"
+
 collections:
   # =========================
   # AJUSTES DEL SITIO
@@ -166,9 +167,13 @@ collections:
     format: "json"
     extension: "json"
     create: true
-    slug: "{{slug}}"
+
+    # Evita slugs “cortos” por título y mantiene consistencia con catálogo/filtros.
+    slug: "{{linea | slug}}-{{categoria | slug}}-{{title | slug}}"
+
     summary: "{{title}} — {{linea}} / {{categoria}}"
-    sortable_fields: ["title", "linea", "categoria", "published"]
+    sortable_fields: ["order", "title", "linea", "categoria", "published"]
+
     fields:
       - {
           label: "Publicado",
@@ -185,8 +190,38 @@ collections:
         }
 
       - { label: "Título", name: "title", widget: "string" }
-      - { label: "Línea", name: "linea", widget: "string" }
-      - { label: "Categoría", name: "categoria", widget: "string" }
+
+      # RESTAURADO: dropdown (incluye variantes para no romper productos antiguos)
+      - label: "Línea"
+        name: "linea"
+        widget: "select"
+        options:
+          - "Lavandería Institucional y Hospitalaria"
+          - "Aseo y Superficies"
+          - "Aseo de Cocinas"
+          - "Cuidado Personal"
+
+      # RESTAURADO: dropdown (incluye variantes típicas)
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        options:
+          - "Detergentes"
+          - "Suavizantes"
+          - "Blanqueadores"
+          - "Desmanchadores"
+          - "Refuerzos / Desengrasantes"
+          - "Pisos"
+          - "Superficies"
+          - "Baños"
+          - "Ambientadores"
+          - "Vajilla y superficies"
+          - "Vajilla y Superficies"
+          - "Desengrasantes de cocina"
+          - "Jabón de manos"
+          - "Alcohol"
+          - "Alcohol glicerinado"
+          - "Gel antibacterial"
 
       - {
           label: "Descripción corta",
@@ -200,6 +235,43 @@ collections:
           widget: "text",
           required: false,
         }
+
+      # RESTAURADO: Presentaciones (tal cual tu JSON existente)
+      - label: "Presentaciones"
+        name: "presentaciones"
+        widget: "list"
+        required: false
+        summary: "{{fields.empaque}} - {{fields.volumen}}{{fields.unidad}}"
+        fields:
+          - label: "Empaque"
+            name: "empaque"
+            widget: "select"
+            options:
+              - "Galón"
+              - "Garrafa"
+              - "Botella"
+              - "Bidón"
+              - "Bolsa"
+              - "Unidad"
+            required: true
+
+          - label: "Cantidad"
+            name: "volumen"
+            widget: "number"
+            value_type: "int"
+            min: 1
+            required: true
+
+          - label: "Unidad de medida"
+            name: "unidad"
+            widget: "select"
+            options:
+              - "ml"
+              - "L"
+              - "kg"
+              - "g"
+              - "unid"
+            required: true
 
       - label: "Imagen"
         name: "image"
