@@ -76,24 +76,27 @@
       "title": "Soluciones para Lavandería Institucional y Hospitalaria",
       "subtitle": "Procesos optimizados para reducir consumo y cuidar textiles.",
       "ctaLabel": "Ver portafolio",
-      "ctaHref": "#linea-lavanderia"
+      "ctaHref": "#linea-lavanderia",
+      "order": 1
     },
     {
       "image": "/assets/uploads/whatsapp-image-2026-02-26-at-10.47.33-am.jpeg",
       "title": "Blanqueo eficiente",
       "subtitle": "Mayor blancura con menor daño a fibras y otra cosa.",
       "ctaLabel": "Contactanos",
-      "ctaHref": "#linea-lavanderia"
+      "ctaHref": "#linea-lavanderia",
+      "order": 4
     },
     {
       "image": "/assets/uploads/whatsapp-image-2026-02-26-at-11.15.01-am.jpeg",
       "title": "Aseo Personal Intitucional",
       "subtitle": "Productos para la limpieza y aseo personal",
       "ctaLabel": "Solicitar demo",
-      "ctaHref": "#demo"
+      "ctaHref": "#demo",
+      "order": 3
     },
     {
-      "order": 4,
+      "order": 2,
       "title": "Acompañamos y Capacitamos a tu Personal",
       "image": "/assets/uploads/whatsapp-image-2026-02-26-at-10.47.33-am-2-.jpeg"
     }
