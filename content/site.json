@@ -86,11 +86,16 @@
       "ctaHref": "#linea-lavanderia"
     },
     {
-      "image": "/assets/uploads/aseopersonal.png",
+      "image": "/assets/uploads/whatsapp-image-2026-02-26-at-11.15.01-am.jpeg",
       "title": "Aseo Personal Intitucional",
       "subtitle": "Productos para la limpieza y aseo personal",
       "ctaLabel": "Solicitar demo",
       "ctaHref": "#demo"
+    },
+    {
+      "order": 4,
+      "title": "Acompañamos y Capacitamos a tu Personal",
+      "image": "/assets/uploads/whatsapp-image-2026-02-26-at-10.47.33-am-2-.jpeg"
     }
   ],
   "email": "psmaxsas@hotmail.com",
