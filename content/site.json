@@ -64,7 +64,7 @@
   "siteName": "PsMax",
   "logoHeight": 80,
   "socialFacebook": "https://facebook.com/psmaxmultisoluciones",
-  "address": "Bogotá, Colombia",
+  "address": "Calle 6 No 2-64 Lote 4 Zipaquira, Colombia",
   "whatsappMessage": "Hola PS Max, estoy interesado en sus productos. ¿Me puedes ayudar con una cotización?",
   "imgExperienciaAlign": "center",
   "experienceText": "Contamos con más de 10 años de experiencia ofreciendo los mejores productos para el aseo y la desinfección.",
@@ -94,5 +94,5 @@
     }
   ],
   "email": "psmaxsas@hotmail.com",
-  "heroTitle": "Soluciones para Lavandería Institucional y Hospitalaria"
+  "heroTitle": "Soluciones para Lavanderías Institucionales y Hospitalarias"
 }
