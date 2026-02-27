@@ -5,7 +5,7 @@ backend:
   base_url: https://psmax-auth-server.onrender.com
   auth_endpoint: auth
 
-local_backend: true
+local_backend: false
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
