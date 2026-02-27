@@ -1,5 +1,6 @@
 {
   "heroImage": "",
+  "productSectionTitle": "Nuestros Servicios",
   "products": [
     {
       "id": "lavanderia-detergente-industrial-x",
@@ -25,8 +26,10 @@
   "ctaLabel": "Ver portafolio",
   "socialInstagram": "https://instagram.com/psmaxmultisoluciones",
   "imgExperienciaGap": 2,
+  "serviceSectionTitle": "Nuestros Servicios",
   "logo": "/assets/uploads/logopsmax.png",
   "socialLinkedin": "https://www.linkedin.com/company/psmaxmultisoluciones",
+  "footerCopyright": "© PS Max Multisoluciones {year}. Todos los derechos reservados.",
   "phone": "573173657030",
   "imgExperiencia": "/assets/uploads/imgexp.png",
   "productLines": [
@@ -107,5 +110,6 @@
     }
   ],
   "email": "psmaxsas@hotmail.com",
+  "contactBgColor": "#12182c",
   "heroTitle": "Soluciones para Lavanderías Institucionales y Hospitalarias"
 }

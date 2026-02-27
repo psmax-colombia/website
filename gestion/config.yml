@@ -5,7 +5,7 @@ backend:
   base_url: https://psmax-auth-server.onrender.com
   auth_endpoint: auth
 
-local_backend: false
+local_backend: true
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
@@ -26,16 +26,6 @@ collections:
           # Branding
           - { label: "Nombre del sitio", name: "siteName", widget: "string" }
           - { label: "Logo", name: "logo", widget: "image" }
-
-          # Hero
-          - label: "Título principal (Hero)"
-            name: "heroTitle"
-            widget: "string"
-            hint: "Ej: Productos profesionales para aseo y desinfección"
-
-          - label: "Subtítulo (Hero)"
-            name: "heroSubtitle"
-            widget: "text"
 
           # =========================
           # CONTACTO
@@ -124,7 +114,101 @@ collections:
             summary: "{{fields.title}}"
             fields:
               - { label: "Título", name: "title", widget: "string" }
+              - {
+                  label: "Subtítulo",
+                  name: "subtitle",
+                  widget: "text",
+                  required: false,
+                }
               - { label: "Imagen", name: "image", widget: "image" }
+              - {
+                  label: "CTA Label",
+                  name: "ctaLabel",
+                  widget: "string",
+                  required: false,
+                }
+              - {
+                  label: "CTA Href",
+                  name: "ctaHref",
+                  widget: "string",
+                  required: false,
+                }
+              - {
+                  label: "Orden",
+                  name: "order",
+                  widget: "number",
+                  default: 1,
+                  required: false,
+                }
+          # =========================
+          # EXPERIENCIA (Home)
+          # =========================
+          - label: "Experiencia - Imagen"
+            name: "imgExperiencia"
+            widget: "image"
+            required: false
+
+          - label: "Experiencia - Texto"
+            name: "experienceText"
+            widget: "text"
+            required: false
+
+          - label: "Experiencia - Alto imagen (px)"
+            name: "imgExperienciaHeight"
+            widget: "number"
+            required: false
+            value_type: "int"
+            min: 0
+
+          - label: "Experiencia - Separación inferior (px)"
+            name: "imgExperienciaGap"
+            widget: "number"
+            required: false
+            value_type: "int"
+            min: 0
+
+          - label: "Experiencia - Alineación"
+            name: "imgExperienciaAlign"
+            widget: "select"
+            required: false
+            options: ["left", "center", "right"]
+
+          # =========================
+          # HOME: NUESTROS SERVICIOS
+          # =========================
+          - label: "Título sección Servicios (Home)"
+            name: "serviceSectionTitle"
+            widget: "string"
+            required: false
+            default: "Nuestros Productos"
+
+          - label: "Líneas de Servicios (Home)"
+            name: "productLines"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Descripción", name: "description", widget: "text" }
+
+              - label: "Imagen"
+                name: "image"
+                widget: "image"
+                required: false
+                hint: "Imagen de la tarjeta (Home)"
+
+              - label: "Link"
+                name: "link"
+                widget: "string"
+                required: false
+                hint: "Ej: productos.html"
+
+              - label: "Anchor"
+                name: "anchor"
+                widget: "string"
+                required: false
+                hint: "Ej: aseo-de-superficies"
+
               - {
                   label: "Orden",
                   name: "order",
@@ -134,29 +218,100 @@ collections:
                 }
 
           # =========================
-          # LÍNEAS DE PRODUCTO (HOME)
+          # COLORES
           # =========================
-          - label: "Líneas de producto (Home)"
-            name: "productLines"
+          - label: "Color fondo sección Contáctanos"
+            name: "contactBgColor"
+            widget: "color"
+            required: false
+            hint: "Ej: #0f172a"
+
+          # =========================
+          # FOOTER
+          # =========================
+          - label: "Footer - Texto copyright"
+            name: "footerCopyright"
+            widget: "string"
+            required: false
+            hint: "Puedes usar {year} para el año automático. Ej: © PS Max Multisoluciones {year}. Todos los derechos reservados."
+
+  # =========================
+  # NOSOTROS (SECCIÓN APARTE)
+  # =========================
+  - name: "nosotros"
+    label: "Nosotros"
+    files:
+      - name: "page"
+        label: "Página Nosotros"
+        file: "content/nosotros.json"
+        fields:
+          - {
+              label: "Título",
+              name: "aboutTitle",
+              widget: "string",
+              required: false,
+              default: "Sobre Nosotros",
+            }
+          - {
+              label: "Imagen",
+              name: "aboutImage",
+              widget: "image",
+              required: false,
+            }
+          - {
+              label: "Párrafo 1",
+              name: "aboutText1",
+              widget: "text",
+              required: false,
+            }
+          - {
+              label: "Párrafo 2",
+              name: "aboutText2",
+              widget: "text",
+              required: false,
+            }
+
+          - {
+              label: "Misión (título)",
+              name: "missionTitle",
+              widget: "string",
+              required: false,
+              default: "Misión",
+            }
+          - {
+              label: "Misión (texto)",
+              name: "missionText",
+              widget: "text",
+              required: false,
+            }
+
+          - {
+              label: "Visión (título)",
+              name: "visionTitle",
+              widget: "string",
+              required: false,
+              default: "Visión",
+            }
+          - {
+              label: "Visión (texto)",
+              name: "visionText",
+              widget: "text",
+              required: false,
+            }
+
+          - {
+              label: "Valores (título)",
+              name: "valuesTitle",
+              widget: "string",
+              required: false,
+              default: "Valores",
+            }
+          - label: "Valores (lista)"
+            name: "valuesItems"
             widget: "list"
-            collapsed: true
-            summary: "{{fields.title}}"
+            required: false
             fields:
-              - { label: "Título", name: "title", widget: "string" }
-              - { label: "Descripción", name: "description", widget: "text" }
-              - {
-                  label: "Anchor",
-                  name: "anchor",
-                  widget: "string",
-                  hint: "Ej: aseo-de-superficies",
-                }
-              - {
-                  label: "Orden",
-                  name: "order",
-                  widget: "number",
-                  default: 1,
-                  required: false,
-                }
+              - { label: "Valor", name: "item", widget: "string" }
 
   # =========================
   # PRODUCTOS
@@ -168,7 +323,6 @@ collections:
     extension: "json"
     create: true
 
-    # Evita slugs “cortos” por título y mantiene consistencia con catálogo/filtros.
     slug: "{{linea | slug}}-{{categoria | slug}}-{{title | slug}}"
 
     summary: "{{title}} — {{linea}} / {{categoria}}"
@@ -188,10 +342,8 @@ collections:
           default: 1,
           required: false,
         }
-
       - { label: "Título", name: "title", widget: "string" }
 
-      # RESTAURADO: dropdown (incluye variantes para no romper productos antiguos)
       - label: "Línea"
         name: "linea"
         widget: "select"
@@ -201,7 +353,6 @@ collections:
           - "Aseo de Cocinas"
           - "Cuidado Personal"
 
-      # RESTAURADO: dropdown (incluye variantes típicas)
       - label: "Categoría"
         name: "categoria"
         widget: "select"
@@ -236,7 +387,6 @@ collections:
           required: false,
         }
 
-      # RESTAURADO: Presentaciones (tal cual tu JSON existente)
       - label: "Presentaciones"
         name: "presentaciones"
         widget: "list"

@@ -1,0 +1,25 @@
+{
+  "aboutTitle": "Sobre Nosotros",
+  "missionTitle": "Misión",
+  "aboutImage": "/assets/uploads/whatsapp-image-2026-02-26-at-10.47.33-am-2-.jpeg",
+  "visionTitle": "Visión",
+  "visionText": "Ser reconocidos a nivel nacional por la innovación, calidad y compromiso con la excelencia en el cuidado institucional y hospitalario.",
+  "valuesTitle": "Valores",
+  "aboutText1": "En PS Max Multisoluciones somos una empresa colombiana con más de una década de experiencia ofreciendo soluciones profesionales en lavandería institucional, hospitalaria y aseo integral.",
+  "aboutText2": "Nuestro compromiso es brindar productos de la más alta calidad, garantizando limpieza, seguridad y eficiencia para nuestros clientes en los sectores hospitalario, hotelero e industrial.",
+  "missionText": "Ofrecer productos y servicios que optimicen los procesos de limpieza y desinfección institucional con un enfoque sostenible y responsable.",
+  "valuesItems": [
+    {
+      "item": "Compromiso"
+    },
+    {
+      "item": "Responsabilidad"
+    },
+    {
+      "item": "Innovación"
+    },
+    {
+      "item": "Calidad"
+    }
+  ]
+}

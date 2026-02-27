@@ -134,48 +134,12 @@
     </p>
   </div>
 </section>
-<!-- POR QUÉ ELEGIRNOS -->
-<section id="por-que" class="bg-white">
-  <div class="container mx-auto px-4 py-14">
-    <h2 class="text-2xl md:text-3xl font-bold text-primary-800 mb-6">
-      ¿Por qué elegir PS Max Multisoluciones?
-    </h2>
-    <p class="text-slate-600 max-w-3xl">
-      Acompañamos a nuestros clientes con soluciones integrales en aseo, desinfección y lavandería,
-      priorizando la seguridad, el rendimiento y la optimización de recursos.
-    </p>
 
-    <div class="mt-8 grid md:grid-cols-3 gap-6">
-  <div class="porque-card">
-    <h3 class="mb-2">Experiencia comprobada</h3>
-    <p>
-      Más de 10 años trabajando con sectores hospitalarios, hoteleros e institucionales.
-    </p>
-  </div>
-
-  <div class="porque-card">
-    <h3 class="mb-2">Acompañamiento técnico</h3>
-    <p>
-      Asesoría en la elección de productos, dosificación y mejores prácticas de limpieza.
-    </p>
-  </div>
-
-  <div class="porque-card">
-    <h3 class="mb-2">Calidad y respaldo</h3>
-    <p>
-      Fórmulas de alta calidad, respaldo postventa y acompañamiento en la implementación.
-    </p>
-  </div>
-</div>
-
-  </div>
-</section>
-
-<!-- NUESTROS PRODUCTOS -->
+<!-- NUESTROS SERVICIOS-->
 <!-- PRODUCTOS (dinámico: Título -> Imagen -> Descripción) -->
 <section id="productos" class="bg-gradient-to-b from-accent-50 to-white">
   <div class="container mx-auto px-4 py-14">
-    <h2 class="text-2xl md:text-3xl font-bold text-primary-800">Nuestros Productos</h2>
+    <h2 id="serviceSectionTitle" class="text-2xl md:text-3xl font-bold text-primary-800">Nuestros Productos</h2>
 
     <!-- Aquí inyectamos tarjetas por JS -->
     <div id="productLinesContainer" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
@@ -324,9 +288,46 @@
 </form>
   </div>
 </section>
+<!-- POR QUÉ ELEGIRNOS -->
+<section id="por-que" class="bg-white">
+  <div class="container mx-auto px-4 py-14">
+    <h2 class="text-2xl md:text-3xl font-bold text-primary-800 mb-6">
+      ¿Por qué elegir PS Max Multisoluciones?
+    </h2>
+    <p class="text-slate-600 max-w-3xl">
+      Acompañamos a nuestros clientes con soluciones integrales en aseo, desinfección y lavandería,
+      priorizando la seguridad, el rendimiento y la optimización de recursos.
+    </p>
+
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+  <div class="porque-card">
+    <h3 class="mb-2">Experiencia comprobada</h3>
+    <p>
+      Más de 10 años trabajando con sectores hospitalarios, hoteleros e institucionales.
+    </p>
+  </div>
+
+  <div class="porque-card">
+    <h3 class="mb-2">Acompañamiento técnico</h3>
+    <p>
+      Asesoría en la elección de productos, dosificación y mejores prácticas de limpieza.
+    </p>
+  </div>
+
+  <div class="porque-card">
+    <h3 class="mb-2">Calidad y respaldo</h3>
+    <p>
+      Fórmulas de alta calidad, respaldo postventa y acompañamiento en la implementación.
+    </p>
+  </div>
+</div>
+
+  </div>
+</section>
+
 
 <!-- Seccion CONTACTO  INICIO -->
-<section id="contacto" class="bg-slate-900">
+<section id="contacto" class="bg-slate-900" data-dynamic-bg="contactBgColor">
   <div class="container mx-auto px-4 py-8 grid gap-8 md:grid-cols-3 text-white">
 
     <!-- Columna 1: datos de contacto -->
@@ -397,7 +398,7 @@
 
 <!-- FOOTER -->
 <footer class="bg-slate-100 text-center py-4 text-slate-500 text-sm">
-  © PS Max Multisoluciones 2025. Todos los derechos reservados.
+  <span id="footerCopyright">© PS Max Multisoluciones 2025. Todos los derechos reservados.</span>
 </footer>
 
 <!-- BOTÓN FLOTANTE WHATSAPP -->

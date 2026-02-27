@@ -90,33 +90,54 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="bg-white">
     <section class="container mx-auto px-4 py-14 text-center max-w-4xl">
-      <h1 class="text-3xl md:text-5xl font-bold text-primary-800 mb-6">Sobre Nosotros</h1>
+
+      <!-- Título editable -->
+      <h1 id="aboutTitle" class="text-3xl md:text-5xl font-bold text-primary-800 mb-6">Sobre Nosotros</h1>
+
       <div class="mt-8 flex justify-center">
-        <img src="assets/img/nosotrosIMG.png"
+
+        <!-- Imagen editable -->
+        <img id="aboutImage"
+             src="assets/img/nosotrosIMG.png"
              alt="Equipo de PS Max Multisoluciones"
              class="w-full max-w-5xl rounded-2xl shadow-md object-cover" />
       </div>
-      <p class="text-lg text-slate-600 leading-relaxed">
+
+      <!-- Textos editables -->
+      <p id="aboutText1" class="text-lg text-slate-600 leading-relaxed">
         En <strong>PS Max Multisoluciones</strong> somos una empresa colombiana con más de una década de experiencia
         ofreciendo soluciones profesionales en lavandería institucional, hospitalaria y aseo integral.
       </p>
-      <p class="text-lg text-slate-600 leading-relaxed mt-4">
+
+      <p id="aboutText2" class="text-lg text-slate-600 leading-relaxed mt-4">
         Nuestro compromiso es brindar productos de la más alta calidad, garantizando limpieza, seguridad y eficiencia
         para nuestros clientes en los sectores <strong>hospitalario, hotelero e industrial</strong>.
       </p>
 
       <div class="mt-10 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         <div class="p-6 border rounded-2xl bg-accent-50">
-          <h3 class="text-xl font-semibold text-primary-700">Misión</h3>
-          <p class="mt-2 text-slate-600">Ofrecer productos y servicios que optimicen los procesos de limpieza y desinfección institucional con un enfoque sostenible y responsable.</p>
+
+          <!-- Misión editable -->
+          <h3 id="missionTitle" class="text-xl font-semibold text-primary-700">Misión</h3>
+          <p id="missionText" class="mt-2 text-slate-600">
+            Ofrecer productos y servicios que optimicen los procesos de limpieza y desinfección institucional con un enfoque sostenible y responsable.
+          </p>
         </div>
+
         <div class="p-6 border rounded-2xl bg-accent-50">
-          <h3 class="text-xl font-semibold text-primary-700">Visión</h3>
-          <p class="mt-2 text-slate-600">Ser reconocidos a nivel nacional por la innovación, calidad y compromiso con la excelencia en el cuidado institucional y hospitalario.</p>
+
+          <!-- Visión editable -->
+          <h3 id="visionTitle" class="text-xl font-semibold text-primary-700">Visión</h3>
+          <p id="visionText" class="mt-2 text-slate-600">
+            Ser reconocidos a nivel nacional por la innovación, calidad y compromiso con la excelencia en el cuidado institucional y hospitalario.
+          </p>
         </div>
+
         <div class="p-6 border rounded-2xl bg-accent-50 sm:col-span-2 md:col-span-1">
-          <h3 class="text-xl font-semibold text-primary-700">Valores</h3>
-          <ul class="mt-2 text-slate-600 space-y-1">
+
+          <!-- Valores editables -->
+          <h3 id="valuesTitle" class="text-xl font-semibold text-primary-700">Valores</h3>
+          <ul id="valuesList" class="mt-2 text-slate-600 space-y-1">
             <li>✔ Compromiso</li>
             <li>✔ Responsabilidad</li>
             <li>✔ Innovación</li>
@@ -126,6 +147,7 @@
       </div>
     </section>
   </main>
+
 <!-- Sección CONTACTO (copiada del index) -->
   <section id="contacto" class="bg-slate-900">
     <div class="container mx-auto px-4 py-8 grid gap-8 md:grid-cols-3 text-white">
@@ -192,9 +214,10 @@
 
     </div>
   </section>
+
   <!-- FOOTER -->
   <footer class="bg-slate-100 text-center py-4 text-slate-500 text-sm">
-    © PS Max Multisoluciones 2025. Todos los derechos reservados.
+  <span id="footerCopyright">© PS Max Multisoluciones 2025. Todos los derechos reservados.</span>
   </footer>
 
   <script src="/scripts/main.js" defer></script>
