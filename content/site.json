@@ -51,14 +51,14 @@
       "link": "productos.html",
       "title": "Aseo de Cocinas",
       "description": "Vajilla y superficies",
-      "image": "/assets/uploads/aseoconinas.png",
+      "image": "/assets/uploads/cocinas.jpeg",
       "anchor": "aseo-de-cocinas"
     },
     {
       "link": "productos.html",
       "title": "Cuidado Personal",
       "description": "Jabón de manos, alcohol y alcohol glicerinado",
-      "image": "/assets/uploads/aseopersonalmain.png",
+      "image": "/assets/uploads/personal.jpeg",
       "anchor": "cuidado-personal"
     }
   ],
