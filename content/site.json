@@ -36,28 +36,28 @@
     {
       "link": "productos.html",
       "title": "Lavandería Institucional y Hospitalaria",
-      "description": "Detergentes, Desengrasantes, Suavizantes, Desmanchadores, Blanqueadores y más",
+      "description": "Soluciones profesionales para el lavado de textiles en hospitales, hoteles, clínicas y lavanderías institucionales.\nNuestros productos garantizan limpieza profunda, desinfección y cuidado de las telas, optimizando los procesos de lavado industrial.\nIncluye: Detergentes, Desengrasantes, Suavizantes, Blanqueadores y Desmanchadores especializados.",
       "image": "/assets/uploads/industrial.jpeg",
       "anchor": "lavanderia-institucional-y-hospitalaria"
     },
     {
       "link": "productos.html",
       "title": "Aseo y Superficies",
-      "description": "Pisos y superficies",
+      "description": "Productos diseñados para la limpieza y desinfección de pisos, superficies y áreas institucionales.\nOfrecemos soluciones eficaces para mantener espacios seguros, higiénicos y libres de contaminantes en empresas, clínicas, Clubes, colegios y edificios.\nIncluye: multiusos, desinfectantes, limpia vidrios, Hiclor superficies y ambientadores.",
       "image": "/assets/uploads/cocina.jpeg",
       "anchor": "aseo-de-superficies"
     },
     {
       "link": "productos.html",
       "title": "Aseo de Cocinas",
-      "description": "Vajilla y superficies",
+      "description": "Soluciones especializadas para la limpieza y desinfección de cocinas industriales y áreas de preparación de alimentos.\nNuestros productos eliminan grasa, residuos y bacterias, ayudando a cumplir con normativas sanitarias y estándares de inocuidad alimentaria.\nIdeal para restaurantes, hoteles, comedores industriales y servicios de alimentación.",
       "image": "/assets/uploads/cocinas.jpeg",
       "anchor": "aseo-de-cocinas"
     },
     {
       "link": "productos.html",
       "title": "Cuidado Personal",
-      "description": "Jabón de manos, alcohol y alcohol glicerinado",
+      "description": "Productos diseñados para promover la higiene y el cuidado personal en entornos institucionales.\nOfrecemos soluciones para garantizar la limpieza de manos y la prevención de contagios en empresas, hospitales, colegios y espacios públicos.\nIncluye: Jabon antibacterial de manos, Gel antibacterial, alcohol glicerinado y productos para dispensadores.",
       "image": "/assets/uploads/personal.jpeg",
       "anchor": "cuidado-personal"
     }
