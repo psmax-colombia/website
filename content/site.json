@@ -37,14 +37,14 @@
       "link": "productos.html",
       "title": "Lavandería Institucional y Hospitalaria",
       "description": "Detergentes, Desengrasantes, Suavizantes, Desmanchadores, Blanqueadores y más",
-      "image": "/assets/uploads/lavanderiainstitucional.png",
+      "image": "/assets/uploads/industrial.jpeg",
       "anchor": "lavanderia-institucional-y-hospitalaria"
     },
     {
       "link": "productos.html",
       "title": "Aseo y Superficies",
       "description": "Pisos y superficies",
-      "image": "/assets/uploads/aseodesuperficies.png",
+      "image": "/assets/uploads/cocina.jpeg",
       "anchor": "aseo-de-superficies"
     },
     {
