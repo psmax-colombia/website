@@ -1,0 +1,45 @@
+{
+  "lineas": [
+    {
+      "slug": "lavanderia-institucional-y-hospitalaria",
+      "nombre": "Lavandería institucional y hospitalaria",
+      "orden": 1,
+      "subcategorias": [
+        { "slug": "detergente", "nombre": "Detergente", "orden": 1, "activa": true },
+        { "slug": "desengrasante", "nombre": "Desengrasante", "orden": 2, "activa": true },
+        { "slug": "refuerzo-desengrasante", "nombre": "Refuerzo desengrasante", "orden": 3, "activa": true },
+        { "slug": "blanqueadores", "nombre": "Blanqueadores", "orden": 4, "activa": true },
+        { "slug": "suavisuavizante", "nombre": "Suavisuavizante", "orden": 5, "activa": true },
+        { "slug": "desmanchadores", "nombre": "Desmanchadores", "orden": 6, "activa": true }
+      ]
+    },
+    {
+      "slug": "aseo-de-pisos-y-superficies",
+      "nombre": "Aseo de pisos y superficies",
+      "orden": 2,
+      "subcategorias": [
+        { "slug": "pisos", "nombre": "Pisos", "orden": 1, "activa": true },
+        { "slug": "superficies", "nombre": "Superficies", "orden": 2, "activa": true }
+      ]
+    },
+    {
+      "slug": "aseo-de-cocinas",
+      "nombre": "Aseo de cocinas",
+      "orden": 3,
+      "subcategorias": [
+        { "slug": "vajilla-y-superficies", "nombre": "Vajilla y superficies", "orden": 1, "activa": true }
+      ]
+    },
+    {
+      "slug": "cuidado-personal",
+      "nombre": "Cuidado personal",
+      "orden": 4,
+      "subcategorias": [
+        { "slug": "jabon-de-manos", "nombre": "Jabón de manos", "orden": 1, "activa": true },
+        { "slug": "alcohol", "nombre": "Alcohol", "orden": 2, "activa": true },
+        { "slug": "alcohol-glicerinado", "nombre": "Alcohol glicerinado", "orden": 3, "activa": true },
+        { "slug": "gel-antibacterial", "nombre": "Gel antibacterial", "orden": 4, "activa": true }
+      ]
+    }
+  ]
+}

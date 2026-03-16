@@ -245,3 +245,56 @@ header.sticky {
 .section-anchor-offset {
   scroll-margin-top: 7rem; /* Ajusta 7rem según la altura real del header */
 }
+/* ===== Separación visual entre líneas de productos ===== */
+.product-line-section {
+  margin-top: 4rem;
+  padding: 2rem 1.5rem;
+  background: #ffffff;
+  border: 1px solid #dbe7df;
+  border-radius: 24px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+.product-line-section:first-child {
+  margin-top: 1rem;
+}
+
+.product-line-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid #e8f3ec;
+}
+
+.product-line-title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #0f2f57;
+}
+
+.product-subcategory-block {
+  margin-top: 2rem;
+}
+
+.product-subcategory-block:first-of-type {
+  margin-top: 0;
+}
+
+.product-subcategory-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #17365d;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .product-line-section {
+    margin-top: 5rem;
+    padding: 2.25rem 2rem;
+  }
+
+  .product-line-title {
+    font-size: 2rem;
+  }
+}

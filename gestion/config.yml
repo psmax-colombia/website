@@ -349,14 +349,16 @@ collections:
         widget: "select"
         options:
           - "Lavandería Institucional y Hospitalaria"
-          - "Aseo y Superficies"
+          - "Aseo de pisos y Superficies"
           - "Aseo de Cocinas"
           - "Cuidado Personal"
 
       - label: "Categoría"
         name: "categoria"
         widget: "select"
+        required: false
         options:
+          - ""
           - "Detergentes"
           - "Suavizantes"
           - "Blanqueadores"
@@ -434,6 +436,61 @@ collections:
         widget: "file"
         required: false
         hint: "Sube un PDF si aplica"
+
+  # =========================
+  # CONFIGURACIÓN DE LÍNEAS Y SUBCATEGORÍAS
+  # =========================
+  - name: "product_categories"
+    label: "Líneas y subcategorías"
+    files:
+      - name: "config"
+        label: "Configuración de líneas"
+        file: "content/product_categories.json"
+        fields:
+          - label: "Líneas"
+            name: "lineas"
+            widget: "list"
+            summary: "{{fields.nombre}}"
+            fields:
+              - label: "Slug"
+                name: "slug"
+                widget: "string"
+                hint: "Ej: aseo-y-superficies"
+
+              - label: "Nombre visible"
+                name: "nombre"
+                widget: "string"
+
+              - label: "Orden"
+                name: "orden"
+                widget: "number"
+                default: 1
+                required: false
+
+              - label: "Subcategorías"
+                name: "subcategorias"
+                widget: "list"
+                summary: "{{fields.nombre}}"
+                fields:
+                  - label: "Slug"
+                    name: "slug"
+                    widget: "string"
+                    hint: "Ej: vajilla-y-superficies"
+
+                  - label: "Nombre visible"
+                    name: "nombre"
+                    widget: "string"
+
+                  - label: "Orden"
+                    name: "orden"
+                    widget: "number"
+                    default: 1
+                    required: false
+
+                  - label: "Activa"
+                    name: "activa"
+                    widget: "boolean"
+                    default: true
 
   # =========================
   # ÍNDICE DE PRODUCTOS (PUBLICADOS)
