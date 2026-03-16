@@ -5,7 +5,7 @@ backend:
   base_url: https://psmax-auth-server.onrender.com
   auth_endpoint: auth
 
-local_backend: false
+local_backend: true
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
@@ -356,21 +356,16 @@ collections:
       - label: "Categoría"
         name: "categoria"
         widget: "select"
-        required: false
         options:
-          - ""
-          - "Detergentes"
-          - "Suavizantes"
+          - "Detergente"
+          - "Desengrasante"
+          - "Refuerzo desengrasante"
           - "Blanqueadores"
+          - "Suavizante"
           - "Desmanchadores"
-          - "Refuerzos / Desengrasantes"
           - "Pisos"
           - "Superficies"
-          - "Baños"
-          - "Ambientadores"
           - "Vajilla y superficies"
-          - "Vajilla y Superficies"
-          - "Desengrasantes de cocina"
           - "Jabón de manos"
           - "Alcohol"
           - "Alcohol glicerinado"
