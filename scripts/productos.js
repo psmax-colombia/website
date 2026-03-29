@@ -19,11 +19,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function sortByOrder(items = []) {
     return [...items].sort((a, b) => {
-      const orderA = Number.isFinite(Number(a?.orden)) ? Number(a.orden) : 9999;
-      const orderB = Number.isFinite(Number(a?.orden)) ? Number(b.orden) : 9999;
-
-      if (orderA !== orderB) return orderA - orderB;
-
       const nameA = normalizeText(a?.nombre || a?.title || "");
       const nameB = normalizeText(b?.nombre || b?.title || "");
       return nameA.localeCompare(nameB, "es");
@@ -59,28 +54,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  function getCategoryCandidates(value) {
-    const raw = String(value || "").trim();
-    const normalized = normalizeText(raw);
-    const slug = slugify(raw);
-
-    const candidates = new Set([normalized, slug]);
-
-    if (normalized === "vajilla y superficies") {
-      candidates.add("vajilla-y-superficies");
-    }
-
-    if (normalized === "refuerzos / desengrasantes") {
-      candidates.add("refuerzos-desengrasantes");
-    }
-
-    if (normalized === "refuerzos/desengrasantes") {
-      candidates.add("refuerzos-desengrasantes");
-    }
-
-    return [...candidates];
-  }
-
   function getLineCandidates(value) {
     const raw = String(value || "").trim();
     const normalized = normalizeText(raw);
@@ -88,15 +61,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const candidates = new Set([normalized, slug]);
 
-    // Compatibilidad entre singular y plural
-    if (normalized === "aseo de cocinas") {
-      candidates.add("aseo de cocinas");
-      candidates.add("aseo-de-cocinas");
-    }
-
+    // Compatibilidad mínima entre nombres viejos y nuevos de línea
     if (normalized === "aseo de cocinas") {
       candidates.add("aseo de cocina");
       candidates.add("aseo-de-cocina");
+    }
+
+    if (normalized === "aseo de cocina") {
+      candidates.add("aseo de cocinas");
+      candidates.add("aseo-de-cocinas");
     }
 
     if (normalized === "aseo y superficies") {
@@ -116,29 +89,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const grouped = {};
 
     for (const product of products) {
-      const rawCategory = String(product.categoria || "").trim();
+      const key = normalizeText(product.categoria || "sin-subcategoria");
 
-      // Si no tiene categoría, lo agrupamos en una clave vacía
-      if (!rawCategory) {
-        if (!grouped[""]) {
-          grouped[""] = [];
-        }
-        grouped[""].push(product);
-        continue;
+      if (!grouped[key]) {
+        grouped[key] = [];
       }
 
-      const candidates = getCategoryCandidates(rawCategory);
-      const primaryKey = candidates[0] || "";
-
-      if (!grouped[primaryKey]) {
-        grouped[primaryKey] = [];
-      }
-
-      grouped[primaryKey].push(product);
-
-      for (const alias of candidates.slice(1)) {
-        grouped[alias] = grouped[primaryKey];
-      }
+      grouped[key].push(product);
     }
 
     return grouped;
@@ -155,17 +112,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function buildSubcategoryBlock(title, items) {
-    const cleanTitle = String(title || "").trim();
-
     return `
       <div class="product-subcategory-block">
-        ${
-          cleanTitle
-            ? `<h3 class="product-subcategory-title">
-                 ${cleanTitle}
-               </h3>`
-            : ""
-        }
+        <h3 class="product-subcategory-title">
+          ${title}
+        </h3>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           ${sortProducts(items).map(createProductCard).join("")}
         </div>
@@ -251,43 +202,24 @@ document.addEventListener("DOMContentLoaded", async () => {
           ${buildSectionHeader(line.nombre, line.slug || slugify(line.nombre))}
       `;
 
-      const renderedSubKeys = new Set();
+      const renderedCategoryKeys = new Set();
 
       for (const subcategory of subcategories) {
-        const subKeys = [
-          normalizeText(subcategory.nombre),
-          normalizeText(subcategory.slug),
-          slugify(subcategory.nombre)
-        ];
-
-        let productsForSubcategory = [];
-
-        for (const key of subKeys) {
-          if (grouped[key]?.length) {
-            productsForSubcategory = grouped[key];
-            break;
-          }
-        }
+        const categoryKey = normalizeText(subcategory.nombre);
+        const productsForSubcategory = grouped[categoryKey] || [];
 
         if (!productsForSubcategory.length) continue;
 
-        subKeys.forEach((key) => renderedSubKeys.add(key));
+        renderedCategoryKeys.add(categoryKey);
         lineHtml += buildSubcategoryBlock(subcategory.nombre, productsForSubcategory);
       }
 
-      const seenArrays = new Set();
-      const remainingBlocks = [];
-
-      for (const [key, items] of Object.entries(grouped)) {
-        if (!items?.length) continue;
-        if (renderedSubKeys.has(key)) continue;
-        if (seenArrays.has(items)) continue;
-
-        seenArrays.add(items);
-
-        const originalCategory = String(items[0]?.categoria || "").trim();
-        remainingBlocks.push(buildSubcategoryBlock(originalCategory, items));
-      }
+      const remainingBlocks = Object.entries(grouped)
+        .filter(([key, items]) => items?.length && !renderedCategoryKeys.has(key))
+        .sort((a, b) => a[0].localeCompare(b[0], "es"))
+        .map(([_, items]) =>
+          buildSubcategoryBlock(items[0]?.categoria || "Otras subcategorías", items)
+        );
 
       if (remainingBlocks.length) {
         lineHtml += remainingBlocks.join("");
@@ -320,29 +252,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       remainingLinesMap[lineKey].items.push(product);
     }
 
-    Object.values(remainingLinesMap).forEach((line) => {
-      const grouped = groupProductsBySubcategory(sortProducts(line.items));
-      const seenArrays = new Set();
+    Object.values(remainingLinesMap)
+      .sort((a, b) => normalizeText(a.nombre).localeCompare(normalizeText(b.nombre), "es"))
+      .forEach((line) => {
+        const grouped = groupProductsBySubcategory(sortProducts(line.items));
 
-      html += `
-        <section class="product-line-section">
-          ${buildSectionHeader(line.nombre, slugify(line.nombre))}
-      `;
+        html += `
+          <section class="product-line-section">
+            ${buildSectionHeader(line.nombre, slugify(line.nombre))}
+        `;
 
-      for (const items of Object.values(grouped)) {
-        if (!items?.length) continue;
-        if (seenArrays.has(items)) continue;
+        Object.entries(grouped)
+          .sort((a, b) => a[0].localeCompare(b[0], "es"))
+          .forEach(([_, items]) => {
+            if (!items?.length) return;
 
-        seenArrays.add(items);
+            html += buildSubcategoryBlock(
+              items[0]?.categoria || "Otras subcategorías",
+              items
+            );
+          });
 
-          html += buildSubcategoryBlock(
-          String(items[0]?.categoria || "").trim(),
-          items
-        );
-      }
-
-      html += `</section>`;
-    });
+        html += `</section>`;
+      });
 
     if (!html.trim()) {
       msg.textContent = "No se encontraron productos para mostrar.";
